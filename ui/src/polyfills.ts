@@ -13,10 +13,15 @@
  *
  * Learn more in https://angular.io/docs/ts/latest/guide/browser-support.html
  */
+import 'core-js/es7/reflect';
+import 'zone.js/dist/zone';
+
 
 /***************************************************************************************************
  * BROWSER POLYFILLS
  */
+
+(window as any).global = window;
 
 /** IE9, IE10 and IE11 requires all of the following polyfills. **/
 // import 'core-js/es6/symbol';
@@ -43,8 +48,6 @@
 
 /** Evergreen browsers require these. **/
 // Used for reflect-metadata in JIT. If you use AOT (and only Angular decorators), you can remove.
-import 'core-js/es7/reflect';
-
 
 /**
  * Web Animations `@angular/platform-browser/animations`
@@ -71,8 +74,6 @@ import 'core-js/es7/reflect';
 /***************************************************************************************************
  * Zone JS is required by default for Angular itself.
  */
-import 'zone.js/dist/zone';  // Included with Angular CLI.
-
 
 
 /***************************************************************************************************

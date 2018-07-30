@@ -1,6 +1,4 @@
-var path = require('path');
 var fs = require('fs');
-
 var nodeModules = {};
 fs.readdirSync('node_modules')
     .filter(function(x) {
@@ -11,19 +9,23 @@ fs.readdirSync('node_modules')
     });
 
 module.exports = {
-    mode: 'development',
-    // the main source code file
     entry: './src/index.ts',
     output: {
-        // the output file name
-        filename: 'index.js',
-        // the output path
-        path: path.resolve(__dirname, 'dist')
+        path: __dirname + '/dist',
+        filename: 'index.js'
+    },
+    resolve: {
+        // Add '.ts' and '.tsx' as a resolvable extension.
+        extensions: ['.webpack.js', '.web.js', '.ts', '.tsx', '.js']
     },
     module: {
         rules: [
-            // all files with a `.ts` extension will be handled by `ts-loader`
-            { test: /\.ts$/, loader: 'ts-loader' }
+            // All files with a '.ts' or '.tsx'
+            // extension will be handled by 'ts-loader'
+            {
+                test: /\.tsx?$/,
+                loader: 'ts-loader'
+            }
         ]
     },
     target: 'node',
