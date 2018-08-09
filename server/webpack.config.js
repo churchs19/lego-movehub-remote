@@ -10,6 +10,7 @@ fs.readdirSync('node_modules')
 
 module.exports = {
     entry: './src/index.ts',
+    devtool: 'inline-source-map',
     output: {
         path: __dirname + '/dist',
         filename: 'index.js'

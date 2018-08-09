@@ -2,12 +2,16 @@ import * as express from 'express';
 import { createServer, Server } from 'http';
 import * as socketIo from 'socket.io';
 
+import { MovehubService } from './movehub-service';
+
 export class MovehubServer {
     public static readonly PORT: number = 8080;
     private app: express.Application;
     private server: Server;
     private io: SocketIO.Server;
     private port: string | number;
+
+    private movehubService: MovehubService;
 
     constructor() {
         this.app = express();
@@ -27,6 +31,14 @@ export class MovehubServer {
         });
 
         this.io.on('connect', (socket: any) => {
+            this.movehubService = new MovehubService();
+            this.movehubService.BleReady.subscribe(ready => {
+                console.log('BLE Ready: ' + ready);
+            });
+            this.movehubService.getHub().subscribe(hub => {
+                console.log('HubConnected');
+                this.io.emit('message', 'hub connected');
+            });
             console.log('Connected client on port %s.', this.port);
             socket.on('message', (m: any) => {
                 console.log('[server](message): %s', JSON.stringify(m));

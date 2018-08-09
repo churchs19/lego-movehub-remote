@@ -7,6 +7,7 @@
     "scripts": {
         "test": "./node_modules/jasmine/bin/jasmine.js",
         "build": "webpack --mode=production",
+        "build-dev": "webpack --mode=development",
         "start": "webpack --mode=development && node ./dist/index.js"
     },
     "author": "Shane Church <shane@s-church.net>",
@@ -15,6 +16,7 @@
         "express": "^4.16.3",
         "lodash": "^4.17.10",
         "movehub-async": "^0.4.0",
+        "rxjs": "^6.2.2",
         "socket.io": "^2.1.1"
     },
     "devDependencies": {
