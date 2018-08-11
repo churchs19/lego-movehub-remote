@@ -1,6 +1,5 @@
-// Type definitions for [~THE LIBRARY NAME~] [~OPTIONAL VERSION NUMBER~]
-// Project: [~THE PROJECT NAME~]
-// Definitions by: [~YOUR NAME~] <[~A URL FOR YOU~]>
+// Type definitions for movehub-async(https://github.com/hobbyquaker/node-movehub) version 0.4.1
+// Definitions by: Shane Church <https://s-cchurch.net>
 import { EventEmitter } from 'events';
 
 export type BoostConnectCallback = (error: null | Error, hub: Hub) => {};

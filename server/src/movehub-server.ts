@@ -1,7 +1,10 @@
 import * as express from 'express';
 import { createServer, Server } from 'http';
+import { timer } from 'rxjs';
+import { take } from 'rxjs/operators';
 import * as socketIo from 'socket.io';
 
+import { LedColor } from './ledColor';
 import { MovehubService } from './movehub-service';
 
 export class MovehubServer {
@@ -32,13 +35,27 @@ export class MovehubServer {
 
         this.io.on('connect', (socket: any) => {
             this.movehubService = new MovehubService();
-            this.movehubService.BleReady.subscribe(ready => {
+            this.movehubService.bleReady.subscribe(ready => {
                 console.log('BLE Ready: ' + ready);
             });
-            this.movehubService.getHub().subscribe(hub => {
-                console.log('HubConnected');
-                this.io.emit('message', 'hub connected');
+            this.movehubService.hubFound.subscribe(details => {
+                console.log('Hub found: ' + JSON.stringify(details));
+                this.io.emit('message', 'hub found');
             });
+            this.movehubService.hub.subscribe(hub => {
+                console.log('Hub connected');
+                this.io.emit('message', 'Hub connected');
+
+                const counter = timer(0, 2000);
+                counter.pipe(take(200)).subscribe(x => {
+                    if (x % 2 === 0) {
+                        this.movehubService.led(LedColor.purple).subscribe(() => {});
+                    } else {
+                        this.movehubService.led(LedColor.orange).subscribe(() => {});
+                    }
+                });
+            });
+            this.movehubService.init();
             console.log('Connected client on port %s.', this.port);
             socket.on('message', (m: any) => {
                 console.log('[server](message): %s', JSON.stringify(m));
