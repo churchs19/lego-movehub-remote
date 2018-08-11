@@ -1,11 +1,6 @@
 import * as express from 'express';
 import { createServer, Server } from 'http';
-import { timer } from 'rxjs';
-import { take } from 'rxjs/operators';
 import * as socketIo from 'socket.io';
-
-import { LedColor } from './ledColor';
-import { MovehubService } from './movehub-service';
 
 export class MovehubServer {
     public static readonly PORT: number = 8080;
@@ -14,7 +9,7 @@ export class MovehubServer {
     private io: SocketIO.Server;
     private port: string | number;
 
-    private movehubService: MovehubService;
+    // private movehubService: MovehubService;
 
     constructor() {
         this.app = express();
@@ -34,28 +29,28 @@ export class MovehubServer {
         });
 
         this.io.on('connect', (socket: any) => {
-            this.movehubService = new MovehubService();
-            this.movehubService.bleReady.subscribe(ready => {
-                console.log('BLE Ready: ' + ready);
-            });
-            this.movehubService.hubFound.subscribe(details => {
-                console.log('Hub found: ' + JSON.stringify(details));
-                this.io.emit('message', 'hub found');
-            });
-            this.movehubService.hub.subscribe(hub => {
-                console.log('Hub connected');
-                this.io.emit('message', 'Hub connected');
+            // this.movehubService = new MovehubService();
+            // this.movehubService.bleReady.subscribe(ready => {
+            //     console.log('BLE Ready: ' + ready);
+            // });
+            // this.movehubService.hubFound.subscribe(details => {
+            //     console.log('Hub found: ' + JSON.stringify(details));
+            //     this.io.emit('message', 'hub found');
+            // });
+            // this.movehubService.hub.subscribe(hub => {
+            //     console.log('Hub connected');
+            //     this.io.emit('message', 'Hub connected');
 
-                const counter = timer(0, 2000);
-                counter.pipe(take(200)).subscribe(x => {
-                    if (x % 2 === 0) {
-                        this.movehubService.led(LedColor.purple).subscribe(() => {});
-                    } else {
-                        this.movehubService.led(LedColor.orange).subscribe(() => {});
-                    }
-                });
-            });
-            this.movehubService.init();
+            //     const counter = timer(0, 2000);
+            //     counter.pipe(take(200)).subscribe(x => {
+            //         if (x % 2 === 0) {
+            //             this.movehubService.led(Movehub.LedColor.purple).subscribe(() => {});
+            //         } else {
+            //             this.movehubService.led(Movehub.LedColor.orange).subscribe(() => {});
+            //         }
+            //     });
+            // });
+            // this.movehubService.init();
             console.log('Connected client on port %s.', this.port);
             socket.on('message', (m: any) => {
                 console.log('[server](message): %s', JSON.stringify(m));

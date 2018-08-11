@@ -1,4 +1,4 @@
 declare module 'movehub-async' {
-    const boost: Movehub.Boost;
+    const boost: MovehubAsync.Boost;
     export = boost;
 }
