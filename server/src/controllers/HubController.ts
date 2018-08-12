@@ -75,7 +75,7 @@ export class HubController {
         }
     }
 
-    public updateHub() {
+    public updateHub(): Observable<void> {
         if (this.control.speed !== this.prevControl.speed || this.control.turnAngle !== this.prevControl.turnAngle) {
             let motorA = this.control.speed + (this.control.turnAngle > 0 ? Math.abs(this.control.turnAngle) : 0);
             let motorB = this.control.speed + (this.control.turnAngle < 0 ? Math.abs(this.control.turnAngle) : 0);
@@ -93,7 +93,9 @@ export class HubController {
             this.control.motorA = motorA;
             this.control.motorB = motorB;
 
-            this.hub.motorTimeMulti(60, motorA, motorB);
+            return from(this.hub.motorTimeMultiAsync(60, motorA, motorB));
+        } else {
+            return of();
         }
     }
 }
