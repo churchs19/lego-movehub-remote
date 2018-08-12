@@ -16,17 +16,6 @@ export class HubController {
         this.device = deviceInfo;
         this.control = controlData;
         this.prevControl = { ...this.control };
-
-        // this.states = {
-        //     Turn: turn.bind(this),
-        //     Drive: drive.bind(this),
-        //     Stop: stop.bind(this),
-        //     Back: back.bind(this),
-        //     Manual: manual.bind(this),
-        //     Seek: seek.bind(this)
-        // };
-
-        // this.currentState = this.states['Drive'];
     }
 
     public start(): Observable<void> {
@@ -83,6 +72,28 @@ export class HubController {
             );
         } else {
             return of();
+        }
+    }
+
+    public updateHub() {
+        if (this.control.speed !== this.prevControl.speed || this.control.turnAngle !== this.prevControl.turnAngle) {
+            let motorA = this.control.speed + (this.control.turnAngle > 0 ? Math.abs(this.control.turnAngle) : 0);
+            let motorB = this.control.speed + (this.control.turnAngle < 0 ? Math.abs(this.control.turnAngle) : 0);
+
+            if (motorA > 100) {
+                motorB -= motorA - 100;
+                motorA = 100;
+            }
+
+            if (motorB > 100) {
+                motorA -= motorB - 100;
+                motorB = 100;
+            }
+
+            this.control.motorA = motorA;
+            this.control.motorB = motorB;
+
+            this.hub.motorTimeMulti(60, motorA, motorB);
         }
     }
 }

@@ -5,4 +5,6 @@ export interface IControlData {
     tilt: MovehubAsync.ITilt;
     forceState: null;
     updateInputMode: null;
+    motorA?: number;
+    motorB?: number;
 }
