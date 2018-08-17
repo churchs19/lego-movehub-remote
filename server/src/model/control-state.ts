@@ -1,10 +1,9 @@
-import { IControlData } from '../interfaces/IControlData';
+import { IControlState } from '../interfaces/IControlState';
 
-export class ControlData implements IControlData {
+export class ControlState implements IControlState {
     public speed: number;
     public turnAngle: number;
     public tilt: MovehubAsync.ITilt;
-    public updateInputMode: null;
     public motorA?: number;
     public motorB?: number;
 }

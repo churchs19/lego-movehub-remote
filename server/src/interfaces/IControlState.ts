@@ -1,8 +1,7 @@
-export interface IControlData {
+export interface IControlState {
     speed: number;
     turnAngle: number;
     tilt: MovehubAsync.ITilt;
-    updateInputMode: null;
     motorA?: number;
     motorB?: number;
 }
