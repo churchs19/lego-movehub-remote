@@ -1,6 +1,6 @@
 import * as boost from 'movehub-async';
-import { BehaviorSubject, from, fromEvent, Observable, of, ReplaySubject } from 'rxjs';
-import { map, take } from 'rxjs/operators';
+import { BehaviorSubject, from, fromEvent, Observable, of, Subject, timer } from 'rxjs';
+import { combineLatest, map, pairwise, take, takeUntil } from 'rxjs/operators';
 
 import { IControlState } from '../interfaces/IControlState';
 import { IDeviceInfo } from '../interfaces/IDeviceInfo';
@@ -10,14 +10,17 @@ export class HubController {
 
     private hub: MovehubAsync.Hub;
     private device: IDeviceInfo;
-    private control: ReplaySubject<IControlState>;
+    private control: BehaviorSubject<IControlState>;
+    private timer: Observable<number>;
+    private unsubscribe: Subject<boolean>;
 
     constructor(deviceInfo: IDeviceInfo, controlState: IControlState) {
         this.hub = null;
+        this.unsubscribe = new Subject<boolean>();
         this.deviceInfo = new BehaviorSubject(deviceInfo);
         this.device = deviceInfo;
-        this.control = new ReplaySubject<IControlState>(2);
-        this.control.next(controlState);
+        this.control = new BehaviorSubject<IControlState>(controlState);
+        this.timer = timer(100, 100);
     }
 
     public start(): Observable<void> {
@@ -78,6 +81,8 @@ export class HubController {
         if (this.device.connected && this.hub) {
             return from(this.hub.disconnectAsync()).pipe(
                 map(() => {
+                    this.unsubscribe.next(true);
+                    this.unsubscribe.complete();
                     this.device.connected = false;
                     this.deviceInfo.next(this.device);
                     this.deviceInfo.complete();
@@ -85,34 +90,46 @@ export class HubController {
                 })
             );
         } else {
+            this.unsubscribe.next(true);
+            this.unsubscribe.complete();
             this.deviceInfo.complete();
             this.control.complete();
             return of();
         }
     }
 
-    public updateHub(): Observable<void> {
-        return this.control.pipe(
-        if (this.control.speed !== this.prevControl.speed || this.control.turnAngle !== this.prevControl.turnAngle) {
-            let motorA = this.control.speed + (this.control.turnAngle > 0 ? Math.abs(this.control.turnAngle) : 0);
-            let motorB = this.control.speed + (this.control.turnAngle < 0 ? Math.abs(this.control.turnAngle) : 0);
+    public subscribeControl() {
+        this.control
+            .pipe(
+                pairwise(),
+                combineLatest(this.timer),
+                map(params => {
+                    const prevControl = params[0][0];
+                    const control = params[0][1];
+                    if (control.speed !== prevControl.speed || control.turnAngle !== prevControl.turnAngle) {
+                        let motorA = control.speed + (control.turnAngle > 0 ? Math.abs(control.turnAngle) : 0);
+                        let motorB = control.speed + (control.turnAngle < 0 ? Math.abs(control.turnAngle) : 0);
 
-            if (motorA > 100) {
-                motorB -= motorA - 100;
-                motorA = 100;
-            }
+                        if (motorA > 100) {
+                            motorB -= motorA - 100;
+                            motorA = 100;
+                        }
 
-            if (motorB > 100) {
-                motorA -= motorB - 100;
-                motorB = 100;
-            }
+                        if (motorB > 100) {
+                            motorA -= motorB - 100;
+                            motorB = 100;
+                        }
 
-            this.control.motorA = motorA;
-            this.control.motorB = motorB;
+                        // control.motorA = motorA;
+                        // control.motorB = motorB;
 
-            return from(this.hub.motorTimeMultiAsync(60, motorA, motorB));
-        } else {
-            return of();
-        }
+                        return from(this.hub.motorTimeMultiAsync(60, motorA, motorB));
+                    } else {
+                        return of();
+                    }
+                }),
+                takeUntil(this.unsubscribe)
+            )
+            .subscribe(() => {});
     }
 }

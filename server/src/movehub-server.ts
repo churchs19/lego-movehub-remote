@@ -1,6 +1,5 @@
 import * as express from 'express';
 import { createServer, Server } from 'http';
-import { timer } from 'rxjs';
 import * as socketIo from 'socket.io';
 
 import { HubController } from './controllers/hub-controller';
@@ -37,9 +36,7 @@ export class MovehubServer {
         this.io.on('connect', (socket: any) => {
             const controller = new HubController(new DeviceInfo(), new ControlState());
             controller.start().subscribe(() => {
-                timer(100, 100).subscribe(() => {
-                    controller.updateHub();
-                });
+
             });
             console.log('Connected client on port %s.', this.port);
             socket.on('message', (m: any) => {
@@ -48,6 +45,7 @@ export class MovehubServer {
             });
 
             socket.on('disconnect', () => {
+                controller.disconnect();
                 console.log('Client disconnected');
             });
         });
