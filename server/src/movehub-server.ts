@@ -14,9 +14,6 @@ export class MovehubServer {
     private io: SocketIO.Server;
     private port: string | number;
 
-    private deviceInfo: DeviceInfo;
-    private controlState: ControlState;
-
     constructor() {
         this.app = express();
         this.port = process.env.PORT || MovehubServer.PORT;
@@ -37,7 +34,10 @@ export class MovehubServer {
         this.io.on('connect', (socket: any) => {
             const controller = new HubController(new DeviceInfo(), new ControlState());
             controller.start().subscribe(() => {
+                console.log('Hub connected');
+                this.io.emit('message', 'Hub connected');
                 controller.deviceInfo.subscribe(deviceInfo => {
+                    console.log('deviceInfo: ' + JSON.stringify(deviceInfo));
                     this.io.emit('deviceInfo', deviceInfo);
                 });
             });
@@ -48,6 +48,7 @@ export class MovehubServer {
             });
 
             socket.on('controlInput', (input: IControlState) => {
+                console.log('controlInput: ' + JSON.stringify(input));
                 controller.control = input;
             });
 

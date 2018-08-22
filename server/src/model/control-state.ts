@@ -6,4 +6,13 @@ export class ControlState implements IControlState {
     public tilt: MovehubAsync.ITilt;
     public motorA?: number;
     public motorB?: number;
+
+    constructor() {
+        this.speed = 0;
+        this.turnAngle = 0;
+        this.tilt = {
+            pitch: 0,
+            roll: 0
+        };
+    }
 }

@@ -1,5 +1,6 @@
 import { IDeviceInfo } from '../interfaces/IDeviceInfo';
 import { IPorts } from '../interfaces/IPorts';
+import { Ports } from './ports';
 
 export class DeviceInfo implements IDeviceInfo {
     public ports: IPorts;
@@ -9,4 +10,12 @@ export class DeviceInfo implements IDeviceInfo {
     public color: string;
     public error: string;
     public connected: boolean;
+
+    constructor() {
+        this.ports = new Ports();
+        this.tilt = {
+            pitch: 0,
+            roll: 0
+        };
+    }
 }
