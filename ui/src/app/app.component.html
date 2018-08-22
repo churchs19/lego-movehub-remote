@@ -1,9 +1,7 @@
-<!--The content below is only a placeholder and can be replaced.-->
+<mat-toolbar color="primary">Lego Movehub Remote</mat-toolbar>
 <div>
-  <h1>
-    Welcome to {{ title }}!
-  </h1>
-  <button type="button" (click)="sendMessage()">Test Message</button>
+  <button mat-raised-button type="button" (click)="sendMessage()">Test Message</button>
+  <button mat-raised-button type="button" (click)="disconnect()">Disconnect BTLE</button>
   <div>
       {{message}}
   </div>

@@ -14,15 +14,26 @@ export class AppComponent implements OnInit {
     constructor(private movehubService: MovehubService) {}
 
     ngOnInit() {
-        this.movehubService.getMessage().subscribe(message => {
+        this.movehubService.messages.subscribe(message => {
             if (this.message.length !== 0) {
                 this.message += '\n';
             }
-            this.message += message;
+            this.message += 'Message received: ' + message;
+        });
+
+        this.movehubService.deviceInfo.subscribe(deviceInfo => {
+            if (this.message.length !== 0) {
+                this.message += '\n';
+            }
+            this.message += 'Device info: ' + JSON.stringify(deviceInfo);
         });
     }
 
     public sendMessage() {
         this.movehubService.sendMessage('Hoping this works.');
+    }
+
+    public disconnect() {
+        this.movehubService.disconnect();
     }
 }
