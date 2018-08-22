@@ -3,6 +3,7 @@ import { createServer, Server } from 'http';
 import * as socketIo from 'socket.io';
 
 import { HubController } from './controllers/hub-controller';
+import { IControlState } from './interfaces/IControlState';
 import { ControlState } from './model/control-state';
 import { DeviceInfo } from './model/device-info';
 
@@ -36,12 +37,18 @@ export class MovehubServer {
         this.io.on('connect', (socket: any) => {
             const controller = new HubController(new DeviceInfo(), new ControlState());
             controller.start().subscribe(() => {
-
+                controller.deviceInfo.subscribe(deviceInfo => {
+                    this.io.emit('deviceInfo', deviceInfo);
+                });
             });
             console.log('Connected client on port %s.', this.port);
             socket.on('message', (m: any) => {
                 console.log('[server](message): %s', JSON.stringify(m));
                 this.io.emit('message', m);
+            });
+
+            socket.on('controlInput', (input: IControlState) => {
+                controller.control = input;
             });
 
             socket.on('disconnect', () => {

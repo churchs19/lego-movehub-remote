@@ -10,7 +10,7 @@ export class HubController {
 
     private hub: MovehubAsync.Hub;
     private device: IDeviceInfo;
-    private control: BehaviorSubject<IControlState>;
+    private _control: BehaviorSubject<IControlState>;
     private timer: Observable<number>;
     private unsubscribe: Subject<boolean>;
 
@@ -19,7 +19,7 @@ export class HubController {
         this.unsubscribe = new Subject<boolean>();
         this.deviceInfo = new BehaviorSubject(deviceInfo);
         this.device = deviceInfo;
-        this.control = new BehaviorSubject<IControlState>(controlState);
+        this._control = new BehaviorSubject<IControlState>(controlState);
         this.timer = timer(100, 100);
     }
 
@@ -72,6 +72,8 @@ export class HubController {
                     this.deviceInfo.next(this.device);
                 });
 
+                this.subscribeControl();
+
                 return;
             })
         );
@@ -86,20 +88,24 @@ export class HubController {
                     this.device.connected = false;
                     this.deviceInfo.next(this.device);
                     this.deviceInfo.complete();
-                    this.control.complete();
+                    this._control.complete();
                 })
             );
         } else {
             this.unsubscribe.next(true);
             this.unsubscribe.complete();
             this.deviceInfo.complete();
-            this.control.complete();
+            this._control.complete();
             return of();
         }
     }
 
-    public subscribeControl() {
-        this.control
+    public set control(controlState: IControlState) {
+        this._control.next(controlState);
+    }
+
+    private subscribeControl() {
+        this._control
             .pipe(
                 pairwise(),
                 combineLatest(this.timer),
