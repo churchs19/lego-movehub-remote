@@ -40,6 +40,15 @@ declare namespace MovehubAsync {
         white = 'white'
     }
 
+    export enum SensorColor {
+        black = 'black',
+        blue = 'blue',
+        green = 'green',
+        yellow = 'yellow',
+        red = 'red',
+        white = 'white'
+    }
+
     export enum PortName {
         A = 'A',
         B = 'B',
