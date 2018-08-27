@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { debounceTime, map } from 'rxjs/operators';
 
 import { IDeviceInfo } from './interfaces/IDeviceInfo';
+import { ControlState } from './models/controlState';
 
 @Injectable()
 export class MovehubService {
@@ -34,5 +35,15 @@ export class MovehubService {
                 return info;
             })
         );
+    }
+
+    public drive() {
+        const controlState = new ControlState(50, 0);
+        this.socket.emit('controlInput', controlState);
+    }
+
+    public stop() {
+        const controlState = new ControlState(0, 0);
+        this.socket.emit('controlInput', controlState);
     }
 }

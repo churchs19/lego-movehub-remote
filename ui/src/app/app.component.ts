@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ReplaySubject } from 'rxjs';
 
 import { MovehubService } from '../features/movehub/movehub.service';
 
@@ -8,10 +9,12 @@ import { MovehubService } from '../features/movehub/movehub.service';
     styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-    title = 'movehub';
-    message = '';
+    public message = '';
+    public colorSensor: ReplaySubject<string>;
 
-    constructor(private movehubService: MovehubService) {}
+    constructor(private movehubService: MovehubService) {
+        this.colorSensor = new ReplaySubject(1);
+    }
 
     ngOnInit() {
         this.movehubService.messages.subscribe(message => {
@@ -22,15 +25,16 @@ export class AppComponent implements OnInit {
         });
 
         this.movehubService.deviceInfo.subscribe(deviceInfo => {
-            if (this.message.length !== 0) {
-                this.message += '\n';
-            }
-            this.message += 'Device info: ' + JSON.stringify(deviceInfo);
+            deviceInfo.color ? this.colorSensor.next(deviceInfo.color) : this.colorSensor.next('');
         });
     }
 
-    public sendMessage() {
-        this.movehubService.sendMessage('Hoping this works.');
+    public drive() {
+        this.movehubService.drive();
+    }
+
+    public stop() {
+        this.movehubService.stop();
     }
 
     public disconnect() {

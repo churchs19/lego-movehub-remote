@@ -37,7 +37,7 @@ export class MovehubServer {
                 console.log('Hub connected');
                 this.io.emit('message', 'Hub connected');
                 controller.deviceInfo.subscribe(deviceInfo => {
-                    console.log('deviceInfo: ' + JSON.stringify(deviceInfo));
+                    // console.log('deviceInfo: ' + JSON.stringify(deviceInfo));
                     this.io.emit('deviceInfo', deviceInfo);
                 });
             });
