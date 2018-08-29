@@ -1,0 +1,10 @@
+<mat-toolbar color="primary">Lego Movehub Remote</mat-toolbar>
+<div>
+    <div class="color-sensor" [ngClass]="colorSensor | async">{{colorSensor | async}}</div>
+    <button mat-raised-button type="button" (click)="drive()">Drive</button>
+    <button mat-raised-button type="button" (click)="stop()">Stop</button>
+    <button mat-raised-button type="button" (click)="disconnect()">Disconnect BTLE</button>
+    <!-- <div>
+        {{message}}
+    </div> -->
+</div>
