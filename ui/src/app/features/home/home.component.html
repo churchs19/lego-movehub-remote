@@ -1,5 +1,21 @@
-<mat-toolbar color="primary">Lego Movehub Remote</mat-toolbar>
+<mat-toolbar color="primary">
+    <span>Lego Movehub Remote</span>
+    <div class="toolbar-fill"></div>
+    <button mat-button type="menu" class="menu-trigger" [matMenuTriggerFor]="settingsMenu"><mat-icon>more_vert</mat-icon></button>
+    <mat-menu #settingsMenu="matMenu">
+        <button mat-menu-item>Item 1</button>
+        <button mat-menu-item>Item 2</button>
+    </mat-menu>
+</mat-toolbar>
 <div>
+    <div fxLayout="row" >
+        <div fxFlex fxLayoutAlign="center start">
+            <mat-slider vertical min="-100" max="100" step="1"></mat-slider>
+        </div>
+        <div fxFlex fxLayoutAlign="center start">
+            <mat-slider vertical min="-100" max="100" step="1"></mat-slider>
+        </div>
+    </div>
     <div class="color-sensor" [ngClass]="colorSensor | async">{{colorSensor | async}}</div>
     <button mat-raised-button type="button" (click)="drive()">Drive</button>
     <button mat-raised-button type="button" (click)="stop()">Stop</button>

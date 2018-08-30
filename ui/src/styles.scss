@@ -4,3 +4,13 @@ html,
 body {
     margin: 0;
 }
+
+.toolbar-fill {
+    flex: 1 1 auto;
+}
+
+.mat-button.menu-trigger {
+    min-width: 36px;
+    width: 36px;
+    padding: 0;
+}
