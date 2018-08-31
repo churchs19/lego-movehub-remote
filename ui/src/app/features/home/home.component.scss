@@ -24,3 +24,11 @@
         background-color: #fff;
     }
 }
+
+.connection-status {
+    color: #f00;
+
+    &.connected {
+        color: #0f0;
+    }
+}

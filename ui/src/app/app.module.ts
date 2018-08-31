@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
+import { BrowserModule, HAMMER_GESTURE_CONFIG } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
 import { SocketIoConfig, SocketIoModule } from 'ngx-socket-io';
@@ -7,6 +7,7 @@ import { SocketIoConfig, SocketIoModule } from 'ngx-socket-io';
 import { AppComponent } from './app.component';
 import { AppRoutes } from './app.router';
 import { HomeModule } from './features/home/home.module';
+import { GestureConfig } from '@angular/material';
 
 const config: SocketIoConfig = { url: 'http://localhost:8080', options: {} };
 
@@ -20,7 +21,7 @@ const config: SocketIoConfig = { url: 'http://localhost:8080', options: {} };
         SocketIoModule.forRoot(config),
         RouterModule
     ],
-    providers: [],
+    providers: [{ provide: HAMMER_GESTURE_CONFIG, useClass: GestureConfig }],
     bootstrap: [AppComponent]
 })
 export class AppModule {}

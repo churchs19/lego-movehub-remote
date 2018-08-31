@@ -14,6 +14,10 @@ export class MovehubService {
         this.socket.emit('message', message);
     }
 
+    public connect() {
+        this.socket.connect();
+    }
+
     public disconnect() {
         this.socket.disconnect();
     }
@@ -29,7 +33,6 @@ export class MovehubService {
 
     public get deviceInfo(): Observable<IDeviceInfo> {
         return this.socket.fromEvent<IDeviceInfo>('deviceInfo').pipe(
-            debounceTime(100),
             map(info => {
                 console.log('Device info: ' + JSON.stringify(info));
                 return info;

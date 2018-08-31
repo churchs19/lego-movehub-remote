@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { ReplaySubject } from 'rxjs';
+import { ReplaySubject, BehaviorSubject } from 'rxjs';
 
 import { MovehubService } from '../movehub/movehub.service';
+import { take } from 'rxjs/operators';
 
 @Component({
     selector: 'movehub-home',
@@ -11,6 +12,7 @@ import { MovehubService } from '../movehub/movehub.service';
 export class HomeComponent implements OnInit {
     public message = '';
     public colorSensor: ReplaySubject<string>;
+    public isConnected: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
     constructor(private movehubService: MovehubService) {
         this.colorSensor = new ReplaySubject(1);
@@ -26,6 +28,7 @@ export class HomeComponent implements OnInit {
 
         this.movehubService.deviceInfo.subscribe(deviceInfo => {
             deviceInfo.color ? this.colorSensor.next(deviceInfo.color) : this.colorSensor.next('');
+            this.isConnected.next(deviceInfo.connected);
         });
     }
 
@@ -37,7 +40,14 @@ export class HomeComponent implements OnInit {
         this.movehubService.stop();
     }
 
-    public disconnect() {
-        this.movehubService.disconnect();
+    public toggleConnection() {
+        this.isConnected.pipe(take(1)).subscribe(connected => {
+            if (connected) {
+                this.isConnected.next(false);
+                this.movehubService.disconnect();
+            } else {
+                this.movehubService.connect();
+            }
+        });
     }
 }

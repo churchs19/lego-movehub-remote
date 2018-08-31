@@ -20,7 +20,7 @@ export class HubController {
         this.deviceInfo = new BehaviorSubject(deviceInfo);
         this.device = deviceInfo;
         this._control = new BehaviorSubject<IControlState>(controlState);
-        this.timer = timer(100, 100);
+        this.timer = timer(50, 50);
     }
 
     public start(): Observable<void> {
@@ -129,7 +129,7 @@ export class HubController {
                         // control.motorA = motorA;
                         // control.motorB = motorB;
 
-                        return from(this.hub.motorTimeMultiAsync(60, motorA, motorB));
+                        return from(this.hub.motorTimeMultiAsync(50, motorA, motorB));
                     } else {
                         return of();
                     }
