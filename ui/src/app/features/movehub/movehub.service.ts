@@ -8,11 +8,9 @@ import { ControlState } from './models/controlState';
 
 @Injectable()
 export class MovehubService {
-    constructor(private socket: Socket) {}
+    public controlState: ControlState = new ControlState(0, 0);
 
-    sendMessage(message: string) {
-        this.socket.emit('message', message);
-    }
+    constructor(private socket: Socket) {}
 
     public connect() {
         this.socket.connect();
@@ -22,15 +20,6 @@ export class MovehubService {
         this.socket.disconnect();
     }
 
-    public get messages(): Observable<string> {
-        return this.socket.fromEvent<any>('message').pipe(
-            map(data => {
-                console.log('Message received: ' + JSON.stringify(data));
-                return data;
-            })
-        );
-    }
-
     public get deviceInfo(): Observable<IDeviceInfo> {
         return this.socket.fromEvent<IDeviceInfo>('deviceInfo').pipe(
             map(info => {
@@ -38,11 +27,6 @@ export class MovehubService {
                 return info;
             })
         );
-    }
-
-    public drive() {
-        const controlState = new ControlState(50, 0);
-        this.socket.emit('controlInput', controlState);
     }
 
     public stop() {

@@ -1,34 +1,33 @@
-<mat-toolbar color="primary">
-    <span>Lego Movehub Remote</span>
-    <div class="toolbar-fill"></div>
-    <button mat-icon-button type="button" class="connection-status" [ngClass]="{ connected: (isConnected | async) }" (click)="toggleConnection()">
-        <mat-icon *ngIf="isConnected | async">bluetooth_connected</mat-icon>
-        <mat-icon *ngIf="!(isConnected | async)">bluetooth_disabled</mat-icon>
-    </button>
-    <button mat-button type="menu" class="menu-trigger" [matMenuTriggerFor]="settingsMenu"><mat-icon>more_vert</mat-icon></button>
-    <mat-menu #settingsMenu="matMenu">
-        <button mat-menu-item (click)="toggleConnection()">
-            <span *ngIf="isConnected | async">Disconnect</span>
-            <span *ngIf="!(isConnected | async)">Connect</span>
+<div class="app-container">
+    <mat-toolbar color="primary">
+        <span>Lego Movehub Remote</span>
+        <div class="toolbar-fill"></div>
+        <button mat-icon-button type="button" class="connection-status" [ngClass]="{ connected: (isConnected | async) }" (click)="toggleConnection()">
+            <mat-icon *ngIf="isConnected | async">bluetooth_connected</mat-icon>
+            <mat-icon *ngIf="!(isConnected | async)">bluetooth_disabled</mat-icon>
         </button>
-        <button mat-menu-item>Item 2</button>
-    </mat-menu>
-</mat-toolbar>
-<div class="mat-typography">
-    <div fxLayout="row">
-        <div fxFlex fxLayout="column" fxLayoutAlign="start center">
-            <span class="mat-body-2">Motor A</span>
-            <mat-slider vertical min="-100" max="100" step="1" value="0"></mat-slider>
-        </div>
-        <div fxFlex fxLayout="column" fxLayoutAlign="start center">
-            <span class="mat-body-2">Motor B</span>
-            <mat-slider vertical min="-100" max="100" step="1" value="0"></mat-slider>
+        <button mat-button type="menu" class="menu-trigger" [matMenuTriggerFor]="settingsMenu"><mat-icon>more_vert</mat-icon></button>
+        <mat-menu #settingsMenu="matMenu">
+            <button mat-menu-item (click)="toggleConnection()">
+                <span *ngIf="isConnected | async">Disconnect</span>
+                <span *ngIf="!(isConnected | async)">Connect</span>
+            </button>
+        </mat-menu>
+    </mat-toolbar>
+    <div class="content-container">
+        <div class="row">
+            <div class="column">
+                <span class="mat-body-2">Motor A</span>
+                <mat-slider thumbLabel vertical min="-100" max="100" step="1" value="0"></mat-slider>
+            </div>
+            <div class="column status-section">
+                <div class="color-sensor" [ngClass]="colorSensor | async">{{colorSensor | async}}</div>
+                <button mat-button type="button" (click)="stop()">STOP</button>
+            </div>
+            <div class="column">
+                <span class="mat-body-2">Motor B</span>
+                <mat-slider thumbLabel vertical min="-100" max="100" step="1" value="0"></mat-slider>
+            </div>
         </div>
     </div>
-    <div class="color-sensor" [ngClass]="colorSensor | async">{{colorSensor | async}}</div>
-    <button mat-raised-button type="button" (click)="drive()">Drive</button>
-    <button mat-raised-button type="button" (click)="stop()">Stop</button>
-    <!-- <div>
-        {{message}}
-    </div> -->
 </div>

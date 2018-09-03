@@ -3,6 +3,41 @@
 html,
 body {
     margin: 0;
+    min-height: 100vh;
+}
+
+.app-container,
+.content-container {
+    display: flex;
+    align-items: stretch;
+    justify-content: stretch;
+    flex-direction: column;
+}
+
+.app-container {
+    min-height: 100vh;
+}
+
+.row {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: row;
+}
+
+.column {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.mat-toolbar {
+    flex: 0 0 auto;
+}
+
+.content-container {
+    flex: 1 1 auto;
 }
 
 .toolbar-fill {

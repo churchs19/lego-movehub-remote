@@ -112,9 +112,9 @@ export class HubController {
                 map(params => {
                     const prevControl = params[0][0];
                     const control = params[0][1];
-                    if (control.speed !== prevControl.speed || control.turnAngle !== prevControl.turnAngle) {
-                        let motorA = control.speed + (control.turnAngle > 0 ? Math.abs(control.turnAngle) : 0);
-                        let motorB = control.speed + (control.turnAngle < 0 ? Math.abs(control.turnAngle) : 0);
+                    if (control.motorA !== prevControl.motorA || control.motorB !== prevControl.motorB) {
+                        let motorA = control.motorA;
+                        let motorB = control.motorB;
 
                         if (motorA > 100) {
                             motorB -= motorA - 100;
@@ -125,9 +125,6 @@ export class HubController {
                             motorA -= motorB - 100;
                             motorB = 100;
                         }
-
-                        // control.motorA = motorA;
-                        // control.motorB = motorB;
 
                         return from(this.hub.motorTimeMultiAsync(50, motorA, motorB));
                     } else {

@@ -19,21 +19,10 @@ export class HomeComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.movehubService.messages.subscribe(message => {
-            if (this.message.length !== 0) {
-                this.message += '\n';
-            }
-            this.message += 'Message received: ' + message;
-        });
-
         this.movehubService.deviceInfo.subscribe(deviceInfo => {
             deviceInfo.color ? this.colorSensor.next(deviceInfo.color) : this.colorSensor.next('');
             this.isConnected.next(deviceInfo.connected);
         });
-    }
-
-    public drive() {
-        this.movehubService.drive();
     }
 
     public stop() {
