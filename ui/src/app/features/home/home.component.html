@@ -18,7 +18,7 @@
         <div class="row">
             <div class="column">
                 <span class="mat-body-2">Motor A</span>
-                <mat-slider thumbLabel vertical min="-100" max="100" step="1" value="0"></mat-slider>
+                <mat-slider thumbLabel tickInterval="100" vertical min="-100" max="100" step="1" value="0"></mat-slider>
             </div>
             <div class="column status-section">
                 <div class="color-sensor" [ngClass]="colorSensor | async">{{colorSensor | async}}</div>
@@ -26,7 +26,7 @@
             </div>
             <div class="column">
                 <span class="mat-body-2">Motor B</span>
-                <mat-slider thumbLabel vertical min="-100" max="100" step="1" value="0"></mat-slider>
+                <mat-slider thumbLabel tickInterval="100" vertical min="-100" max="100" step="1" value="0"></mat-slider>
             </div>
         </div>
     </div>

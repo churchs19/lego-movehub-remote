@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { ReplaySubject, BehaviorSubject } from 'rxjs';
-
-import { MovehubService } from '../movehub/movehub.service';
+import { BehaviorSubject, ReplaySubject } from 'rxjs';
 import { take } from 'rxjs/operators';
+
+import { ControlState } from '../movehub/models/controlState';
+import { MovehubService } from '../movehub/movehub.service';
 
 @Component({
     selector: 'movehub-home',
@@ -13,6 +14,8 @@ export class HomeComponent implements OnInit {
     public message = '';
     public colorSensor: ReplaySubject<string>;
     public isConnected: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+
+    public controlState: ControlState = new ControlState(0, 0);
 
     constructor(private movehubService: MovehubService) {
         this.colorSensor = new ReplaySubject(1);
