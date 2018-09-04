@@ -1,6 +1,6 @@
 import * as boost from 'movehub-async';
-import { BehaviorSubject, from, fromEvent, Observable, of, Subject, timer } from 'rxjs';
-import { combineLatest, map, pairwise, take, takeUntil } from 'rxjs/operators';
+import { BehaviorSubject, from, fromEvent, interval, Observable, of, Subject, timer } from 'rxjs';
+import { combineLatest, debounceTime, map, take, takeUntil } from 'rxjs/operators';
 
 import { IControlState } from '../interfaces/IControlState';
 import { IDeviceInfo } from '../interfaces/IDeviceInfo';
@@ -10,8 +10,8 @@ export class HubController {
 
     private hub: MovehubAsync.Hub;
     private device: IDeviceInfo;
-    private _control: BehaviorSubject<IControlState>;
     private timer: Observable<number>;
+    private _control: BehaviorSubject<IControlState>;
     private unsubscribe: Subject<boolean>;
 
     constructor(deviceInfo: IDeviceInfo, controlState: IControlState) {
@@ -20,7 +20,6 @@ export class HubController {
         this.deviceInfo = new BehaviorSubject(deviceInfo);
         this.device = deviceInfo;
         this._control = new BehaviorSubject<IControlState>(controlState);
-        this.timer = timer(50, 50);
     }
 
     public start(): Observable<void> {
@@ -105,34 +104,27 @@ export class HubController {
     }
 
     private subscribeControl() {
+        this.timer = interval(50);
+        let moving = false;
         this._control
             .pipe(
-                pairwise(),
+                debounceTime(50),
                 combineLatest(this.timer),
-                map(params => {
-                    const prevControl = params[0][0];
-                    const control = params[0][1];
-                    if (control.motorA !== prevControl.motorA || control.motorB !== prevControl.motorB) {
-                        let motorA = control.motorA;
-                        let motorB = control.motorB;
-
-                        if (motorA > 100) {
-                            motorB -= motorA - 100;
-                            motorA = 100;
-                        }
-
-                        if (motorB > 100) {
-                            motorA -= motorB - 100;
-                            motorB = 100;
-                        }
-
-                        return from(this.hub.motorTimeMultiAsync(50, motorA, motorB));
-                    } else {
-                        return of();
-                    }
-                }),
                 takeUntil(this.unsubscribe)
             )
-            .subscribe(() => {});
+            .subscribe(params => {
+                if (!moving) {
+                    let motorA = params[0].motorA > 100 ? 100 : params[0].motorA;
+                    motorA = motorA < -100 ? -100 : motorA;
+                    let motorB = params[0].motorB > 100 ? 100 : params[0].motorB;
+                    motorB = motorB < -100 ? -100 : motorB;
+
+                    moving = true;
+
+                    from(this.hub.motorTimeMultiAsync(0.1, motorA, motorB)).subscribe(() => {
+                        moving = false;
+                    });
+                }
+            });
     }
 }

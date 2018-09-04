@@ -18,15 +18,15 @@
         <div class="row">
             <div class="column">
                 <span class="mat-body-2">Motor A</span>
-                <mat-slider thumbLabel tickInterval="100" vertical min="-100" max="100" step="1" value="0"></mat-slider>
+                <mat-slider thumbLabel tickInterval="100" vertical min="-100" max="100" step="1" value="" (change)="updateInput()" [(ngModel)]="controlState.motorA" [disabled]="!(isConnected | async)"></mat-slider>
             </div>
             <div class="column status-section">
                 <div class="color-sensor" [ngClass]="colorSensor | async">{{colorSensor | async}}</div>
-                <button mat-button type="button" (click)="stop()">STOP</button>
+                <button mat-button type="button" (click)="stop()" [disabled]="!(isConnected | async)">STOP</button>
             </div>
             <div class="column">
                 <span class="mat-body-2">Motor B</span>
-                <mat-slider thumbLabel tickInterval="100" vertical min="-100" max="100" step="1" value="0"></mat-slider>
+                <mat-slider thumbLabel tickInterval="100" vertical min="-100" max="100" step="1" value="0" (change)="updateInput()" [(ngModel)]="controlState.motorB" [disabled]="!(isConnected | async)"></mat-slider>
             </div>
         </div>
     </div>

@@ -3,7 +3,7 @@ import { ITilt } from '../interfaces/ITilt';
 
 export class ControlState implements IControlState {
     constructor(
-        public motorA: number,
-        public motorB: number
+        public motorA: number = 0,
+        public motorB: number = 0
     ) {}
 }

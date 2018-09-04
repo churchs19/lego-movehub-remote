@@ -35,26 +35,27 @@ export class MovehubServer {
             const controller = new HubController(new DeviceInfo(), new ControlState());
             controller.start().subscribe(() => {
                 console.log('Hub connected');
-                this.io.emit('message', 'Hub connected');
                 controller.deviceInfo.subscribe(deviceInfo => {
-                    // console.log('deviceInfo: ' + JSON.stringify(deviceInfo));
+                    console.log('deviceInfo: ' + JSON.stringify(deviceInfo));
                     this.io.emit('deviceInfo', deviceInfo);
+                });
+
+                socket.on('controlInput', (input: IControlState) => {
+                    console.log('controlInput: ' + JSON.stringify(input));
+                    controller.control = input;
+                });
+
+                socket.on('disconnect', () => {
+                    console.log('Client disconnected');
+                    controller.disconnect().subscribe(() => {
+                        console.log('Hub disconnected');
+                    });
                 });
             });
             console.log('Connected client on port %s.', this.port);
             socket.on('message', (m: any) => {
                 console.log('[server](message): %s', JSON.stringify(m));
                 this.io.emit('message', m);
-            });
-
-            socket.on('controlInput', (input: IControlState) => {
-                console.log('controlInput: ' + JSON.stringify(input));
-                controller.control = input;
-            });
-
-            socket.on('disconnect', () => {
-                controller.disconnect();
-                console.log('Client disconnected');
             });
         });
     }
