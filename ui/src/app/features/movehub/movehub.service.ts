@@ -42,7 +42,6 @@ export class MovehubService {
     public get deviceInfo(): Observable<IDeviceInfo> {
         return this.socket.fromEvent<IDeviceInfo>('deviceInfo').pipe(
             map(info => {
-                console.log('Device info: ' + JSON.stringify(info));
                 return info;
             })
         );

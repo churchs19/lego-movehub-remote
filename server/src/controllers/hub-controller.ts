@@ -104,27 +104,19 @@ export class HubController {
     }
 
     private subscribeControl() {
-        this.timer = interval(50);
-        let moving = false;
+        this.timer = timer(0, 29500);
         this._control
             .pipe(
-                debounceTime(50),
                 combineLatest(this.timer),
                 takeUntil(this.unsubscribe)
             )
             .subscribe(params => {
-                if (!moving) {
-                    let motorA = params[0].motorA > 100 ? 100 : params[0].motorA;
-                    motorA = motorA < -100 ? -100 : motorA;
-                    let motorB = params[0].motorB > 100 ? 100 : params[0].motorB;
-                    motorB = motorB < -100 ? -100 : motorB;
+                let motorA = params[0].motorA > 100 ? 100 : params[0].motorA;
+                motorA = motorA < -100 ? -100 : motorA;
+                let motorB = params[0].motorB > 100 ? 100 : params[0].motorB;
+                motorB = motorB < -100 ? -100 : motorB;
 
-                    moving = true;
-
-                    from(this.hub.motorTimeMultiAsync(0.1, motorA, motorB)).subscribe(() => {
-                        moving = false;
-                    });
-                }
+                this.hub.motorTimeMulti(30, motorA, motorB);
             });
     }
 }
