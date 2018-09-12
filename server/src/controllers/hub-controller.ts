@@ -1,9 +1,10 @@
 import * as boost from 'movehub-async';
-import { BehaviorSubject, from, fromEvent, interval, Observable, of, Subject, timer } from 'rxjs';
-import { combineLatest, debounceTime, map, take, takeUntil } from 'rxjs/operators';
+import { BehaviorSubject, from, fromEvent, Observable, of, ReplaySubject, Subject, timer } from 'rxjs';
+import { combineLatest, map, take, takeUntil } from 'rxjs/operators';
 
 import { IControlState } from '../interfaces/IControlState';
 import { IDeviceInfo } from '../interfaces/IDeviceInfo';
+import { LedColor } from '../model/led-color';
 
 export class HubController {
     public deviceInfo: BehaviorSubject<IDeviceInfo>;
@@ -12,12 +13,14 @@ export class HubController {
     private device: IDeviceInfo;
     private timer: Observable<number>;
     private _control: BehaviorSubject<IControlState>;
+    private _led: ReplaySubject<MovehubAsync.LedColor>;
     private unsubscribe: Subject<boolean>;
 
     constructor(deviceInfo: IDeviceInfo, controlState: IControlState) {
         this.hub = null;
         this.unsubscribe = new Subject<boolean>();
-        this.deviceInfo = new BehaviorSubject(deviceInfo);
+        this.deviceInfo = new BehaviorSubject<IDeviceInfo>(deviceInfo);
+        this._led = new ReplaySubject<LedColor>(1);
         this.device = deviceInfo;
         this._control = new BehaviorSubject<IControlState>(controlState);
     }
@@ -71,6 +74,7 @@ export class HubController {
                     this.deviceInfo.next(this.device);
                 });
 
+                this.subscribeLed();
                 this.subscribeControl();
 
                 return;
@@ -103,6 +107,10 @@ export class HubController {
         this._control.next(controlState);
     }
 
+    public set led(color: LedColor) {
+        this._led.next(color);
+    }
+
     private subscribeControl() {
         this.timer = timer(0, 29500);
         this._control
@@ -118,5 +126,11 @@ export class HubController {
 
                 this.hub.motorTimeMulti(30, motorA, motorB);
             });
+    }
+
+    private subscribeLed() {
+        this._led.pipe(takeUntil(this.unsubscribe)).subscribe(color => {
+            this.hub.led(color);
+        });
     }
 }

@@ -2,11 +2,14 @@
     <mat-toolbar color="primary">
         <span>Lego Movehub Remote</span>
         <div class="toolbar-fill"></div>
-        <button mat-icon-button type="button" class="connection-status" [ngClass]="{ connected: (isConnected | async) }" (click)="toggleConnection()">
+        <button mat-icon-button type="button" class="connection-status" [ngClass]="{ connected: (isConnected | async) }"
+            (click)="toggleConnection()">
             <mat-icon *ngIf="isConnected | async">bluetooth_connected</mat-icon>
             <mat-icon *ngIf="!(isConnected | async)">bluetooth_disabled</mat-icon>
         </button>
-        <button mat-button type="menu" class="menu-trigger" [matMenuTriggerFor]="settingsMenu"><mat-icon>more_vert</mat-icon></button>
+        <button mat-button type="menu" class="menu-trigger" [matMenuTriggerFor]="settingsMenu">
+            <mat-icon>more_vert</mat-icon>
+        </button>
         <mat-menu #settingsMenu="matMenu">
             <button mat-menu-item (click)="toggleConnection()">
                 <span *ngIf="isConnected | async">Disconnect</span>
@@ -18,15 +21,31 @@
         <div class="row">
             <div class="column">
                 <span class="mat-body-2">Motor A</span>
-                <mat-slider thumbLabel tickInterval="100" vertical min="-100" max="100" step="1" value="" (change)="updateInput()" [(ngModel)]="controlState.motorA" [disabled]="!(isConnected | async)"></mat-slider>
+                <mat-slider thumbLabel tickInterval="100" vertical min="-100" max="100" step="1" value="" (change)="updateInput()"
+                    [(ngModel)]="controlState.motorA" [disabled]="!(isConnected | async)"></mat-slider>
             </div>
             <div class="column status-section">
                 <div class="color-sensor" [ngClass]="colorSensor | async">{{colorSensor | async}}</div>
                 <button mat-button type="button" (click)="stop()" [disabled]="!(isConnected | async)">STOP</button>
+                <button mat-button [matMenuTriggerFor]="ledMenu">{{ledColor | async}}</button>
+                <mat-menu #ledMenu="matMenu">
+                    <button mat-menu-item (click)="setLed('off')">Off</button>
+                    <button mat-menu-item (click)="setLed('pink')">Pink</button>
+                    <button mat-menu-item (click)="setLed('purple')">Purple</button>
+                    <button mat-menu-item (click)="setLed('blue')">Blue</button>
+                    <button mat-menu-item (click)="setLed('lightblue')">Light Blue</button>
+                    <button mat-menu-item (click)="setLed('cyan')">Cyan</button>
+                    <button mat-menu-item (click)="setLed('green')">Green</button>
+                    <button mat-menu-item (click)="setLed('yellow')">Yellow</button>
+                    <button mat-menu-item (click)="setLed('orange')">Orange</button>
+                    <button mat-menu-item (click)="setLed('red')">Red</button>
+                    <button mat-menu-item (click)="setLed('blue')">White</button>
+                </mat-menu>
             </div>
             <div class="column">
                 <span class="mat-body-2">Motor B</span>
-                <mat-slider thumbLabel tickInterval="100" vertical min="-100" max="100" step="1" value="0" (change)="updateInput()" [(ngModel)]="controlState.motorB" [disabled]="!(isConnected | async)"></mat-slider>
+                <mat-slider thumbLabel tickInterval="100" vertical min="-100" max="100" step="1" value="0" (change)="updateInput()"
+                    [(ngModel)]="controlState.motorB" [disabled]="!(isConnected | async)"></mat-slider>
             </div>
         </div>
     </div>

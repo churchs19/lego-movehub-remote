@@ -2,8 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { BehaviorSubject, ReplaySubject } from 'rxjs';
 import { take, pairwise } from 'rxjs/operators';
 
-import { ControlState } from '../movehub/models/controlState';
+import { ControlState } from '../movehub/models/control-state';
 import { MovehubService } from '../movehub/movehub.service';
+import { LedColor } from '../movehub/models/led-color';
 
 @Component({
     selector: 'movehub-home',
@@ -13,13 +14,15 @@ import { MovehubService } from '../movehub/movehub.service';
 export class HomeComponent implements OnInit {
     public message = '';
     public colorSensor: ReplaySubject<string>;
+    public ledColor: ReplaySubject<LedColor>;
     public socketConnected = false;
     public isConnected: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
     public controlState: ControlState = new ControlState();
 
     constructor(private movehubService: MovehubService) {
-        this.colorSensor = new ReplaySubject(1);
+        this.colorSensor = new ReplaySubject<string>(1);
+        this.ledColor = new ReplaySubject<LedColor>(1);
     }
 
     ngOnInit() {
@@ -60,5 +63,10 @@ export class HomeComponent implements OnInit {
                 this.movehubService.connect();
             }
         });
+    }
+
+    public setLed(color: LedColor) {
+        this.ledColor.next(color);
+        this.movehubService.ledColor = color;
     }
 }

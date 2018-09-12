@@ -80,7 +80,7 @@ declare namespace MovehubAsync {
         motorAngleAsync(port: string | number, angle: number, dutyCycle?: number, wait?: boolean): Promise<void>;
         motorAngleMulti(angle: number, dutyCycleA: number, dutyCycleB: number, callback?: Function): void;
         motorAngleMultiAsync(angle: number, dutyCycleA?: number, dutyCycleB?: number, wait?: boolean): Promise<void>;
-        led(color: LedColor | boolean | number | string, callback: Function): void;
+        led(color: LedColor | boolean | number | string, callback?: Function): void;
         ledAsync(color: LedColor | boolean | number | string): Promise<void>;
         useMetricUnits(): void;
         useImperialUnits(): void;

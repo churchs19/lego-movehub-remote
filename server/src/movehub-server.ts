@@ -6,6 +6,7 @@ import { HubController } from './controllers/hub-controller';
 import { IControlState } from './interfaces/IControlState';
 import { ControlState } from './model/control-state';
 import { DeviceInfo } from './model/device-info';
+import { LedColor } from './model/led-color';
 
 export class MovehubServer {
     public static readonly PORT: number = 8080;
@@ -43,6 +44,11 @@ export class MovehubServer {
                 socket.on('controlInput', (input: IControlState) => {
                     console.log('controlInput: ' + JSON.stringify(input));
                     controller.control = input;
+                });
+
+                socket.on('led', (color: LedColor) => {
+                    console.log('led: ' + color);
+                    controller.led = color;
                 });
 
                 socket.on('disconnect', () => {

@@ -4,7 +4,8 @@ import { fromEvent, merge, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { IDeviceInfo } from './interfaces/IDeviceInfo';
-import { ControlState } from './models/controlState';
+import { ControlState } from './models/control-state';
+import { LedColor } from './models/led-color';
 
 @Injectable()
 export class MovehubService {
@@ -45,5 +46,9 @@ export class MovehubService {
                 return info;
             })
         );
+    }
+
+    public set ledColor(color: LedColor) {
+        this.socket.emit('led', color);
     }
 }
