@@ -1,7 +1,11 @@
+// Type definitions for movehub-async(https://github.com/hobbyquaker/node-movehub) version 0.4.1
+// Definitions by: Shane Church <https://s-church.net>
 import { EventEmitter } from 'events';
 
-// Type definitions for movehub-async(https://github.com/hobbyquaker/node-movehub) version 0.4.1
-// Definitions by: Shane Church <https://s-cchurch.net>
+export = Boost;
+
+declare function MovehubAsync(): MovehubAsync.Boost;
+
 declare namespace MovehubAsync {
     export type BoostConnectCallback = (error: null | Error, hub: Hub) => {};
 
@@ -93,5 +97,5 @@ declare namespace MovehubAsync {
     }
 }
 
-export = MovehubAsync;
-export as namespace MovehubAsync;
+// export = Boost;
+// export as namespace MovehubAsync;

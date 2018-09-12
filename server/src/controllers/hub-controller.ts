@@ -1,10 +1,9 @@
-import * as boost from 'movehub-async';
+import MovehubAsync = require('movehub-async');
 import { BehaviorSubject, from, fromEvent, Observable, of, ReplaySubject, Subject, timer } from 'rxjs';
 import { combineLatest, map, take, takeUntil } from 'rxjs/operators';
 
 import { IControlState } from '../interfaces/IControlState';
 import { IDeviceInfo } from '../interfaces/IDeviceInfo';
-import { LedColor } from '../model/led-color';
 
 export class HubController {
     public deviceInfo: BehaviorSubject<IDeviceInfo>;
@@ -20,13 +19,13 @@ export class HubController {
         this.hub = null;
         this.unsubscribe = new Subject<boolean>();
         this.deviceInfo = new BehaviorSubject<IDeviceInfo>(deviceInfo);
-        this._led = new ReplaySubject<LedColor>(1);
+        this._led = new ReplaySubject<MovehubAsync.LedColor>(1);
         this.device = deviceInfo;
         this._control = new BehaviorSubject<IControlState>(controlState);
     }
 
     public start(): Observable<void> {
-        return from(boost.getHubAsync()).pipe(
+        return from(MovehubAsync.getHubAsync()).pipe(
             take(1),
             map(hub => {
                 this.device.connected = true;
@@ -107,7 +106,7 @@ export class HubController {
         this._control.next(controlState);
     }
 
-    public set led(color: LedColor) {
+    public set led(color: MovehubAsync.LedColor) {
         this._led.next(color);
     }
 

@@ -1,12 +1,12 @@
 import * as express from 'express';
 import { createServer, Server } from 'http';
+import MovehubAsync = require('movehub-async');
 import * as socketIo from 'socket.io';
 
 import { HubController } from './controllers/hub-controller';
 import { IControlState } from './interfaces/IControlState';
 import { ControlState } from './model/control-state';
 import { DeviceInfo } from './model/device-info';
-import { LedColor } from './model/led-color';
 
 export class MovehubServer {
     public static readonly PORT: number = 8080;
@@ -46,7 +46,7 @@ export class MovehubServer {
                     controller.control = input;
                 });
 
-                socket.on('led', (color: LedColor) => {
+                socket.on('led', (color: MovehubAsync.LedColor) => {
                     console.log('led: ' + color);
                     controller.led = color;
                 });

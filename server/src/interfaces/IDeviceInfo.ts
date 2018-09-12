@@ -1,3 +1,5 @@
+import MovehubAsync = require('movehub-async');
+
 import { IPorts } from './IPorts';
 
 export interface IDeviceInfo {
