@@ -25,22 +25,24 @@
                     [(ngModel)]="controlState.motorA" [disabled]="!(isConnected | async)"></mat-slider>
             </div>
             <div class="column status-section">
+                <span class="mat-body-2">Color Sensor</span>
                 <div class="color-sensor" [ngClass]="colorSensor | async">{{colorSensor | async}}</div>
-                <button mat-button type="button" (click)="stop()" [disabled]="!(isConnected | async)">STOP</button>
-                <button mat-button [matMenuTriggerFor]="ledMenu">{{ledColor | async}}</button>
-                <mat-menu #ledMenu="matMenu">
-                    <button mat-menu-item (click)="setLed('off')">Off</button>
-                    <button mat-menu-item (click)="setLed('pink')">Pink</button>
-                    <button mat-menu-item (click)="setLed('purple')">Purple</button>
-                    <button mat-menu-item (click)="setLed('blue')">Blue</button>
-                    <button mat-menu-item (click)="setLed('lightblue')">Light Blue</button>
-                    <button mat-menu-item (click)="setLed('cyan')">Cyan</button>
-                    <button mat-menu-item (click)="setLed('green')">Green</button>
-                    <button mat-menu-item (click)="setLed('yellow')">Yellow</button>
-                    <button mat-menu-item (click)="setLed('orange')">Orange</button>
-                    <button mat-menu-item (click)="setLed('red')">Red</button>
-                    <button mat-menu-item (click)="setLed('blue')">White</button>
-                </mat-menu>
+                <button color="accent" mat-raised-button type="button" (click)="stop()" [disabled]="!(isConnected | async)">STOP</button>
+                <mat-form-field>
+                    <mat-select class="led-color" placeholder="LED Color" [formControl]="ledColorControl" panelClass="led-color-{{ledColorControl.value}}" [disabled]="!(isConnected | async)">
+                        <mat-option value="off">Off</mat-option>
+                        <mat-option value="pink">Pink</mat-option>
+                        <mat-option value="purple">Purple</mat-option>
+                        <mat-option value="blue">Blue</mat-option>
+                        <mat-option value="lightblue">Light Blue</mat-option>
+                        <mat-option value="cyan">Cyan</mat-option>
+                        <mat-option value="green">Green</mat-option>
+                        <mat-option value="yellow">Yellow</mat-option>
+                        <mat-option value="orange">Orange</mat-option>
+                        <mat-option value="red">Red</mat-option>
+                        <mat-option value="white">White</mat-option>
+                    </mat-select>
+                </mat-form-field>
             </div>
             <div class="column">
                 <span class="mat-body-2">Motor B</span>

@@ -1,8 +1,16 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { FormsModule } from '@angular/forms';
-import { MatButtonModule, MatIconModule, MatMenuModule, MatSliderModule, MatToolbarModule } from '@angular/material';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import {
+    MatButtonModule,
+    MatFormFieldModule,
+    MatIconModule,
+    MatMenuModule,
+    MatSelectModule,
+    MatSliderModule,
+    MatToolbarModule
+} from '@angular/material';
 
 import { MovehubModule } from '../movehub/movehub.module';
 import { HomeComponent } from './home.component';
@@ -15,7 +23,10 @@ import { HomeComponent } from './home.component';
         MatIconModule,
         MatMenuModule,
         MatSliderModule,
+        MatFormFieldModule,
+        MatSelectModule,
         FlexLayoutModule,
+        ReactiveFormsModule,
         FormsModule,
         CommonModule
     ],

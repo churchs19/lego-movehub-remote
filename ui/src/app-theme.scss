@@ -6,11 +6,78 @@
 // Be sure that you only ever include this mixin once!
 @include mat-core();
 
+/* For use in src/lib/core/theming/_palette.scss */
+$mat-legoyellow: (
+    50 : #fff9e0,
+    100 : #fff1b3,
+    200 : #ffe780,
+    300 : #ffdd4d,
+    400 : #ffd626,
+    500 : #ffcf00,
+    600 : #ffca00,
+    700 : #ffc300,
+    800 : #ffbd00,
+    900 : #ffb200,
+    A100 : #ffffff,
+    A200 : #fffbf2,
+    A400 : #ffe9bf,
+    A700 : #ffe1a6,
+    contrast: (
+        50 : #000000,
+        100 : #000000,
+        200 : #000000,
+        300 : #000000,
+        400 : #000000,
+        500 : #000000,
+        600 : #000000,
+        700 : #000000,
+        800 : #000000,
+        900 : #000000,
+        A100 : #000000,
+        A200 : #000000,
+        A400 : #000000,
+        A700 : #000000,
+    )
+);
+
+$mat-legored: (
+    50 : #f9e2e3,
+    100 : #f1b7b8,
+    200 : #e88889,
+    300 : #de5859,
+    400 : #d73436,
+    500 : #d01012,
+    600 : #cb0e10,
+    700 : #c40c0d,
+    800 : #be090a,
+    900 : #b30505,
+    A100 : #ffdddd,
+    A200 : #ffaaaa,
+    A400 : #ff7777,
+    A700 : #ff5e5e,
+    contrast: (
+        50 : #000000,
+        100 : #000000,
+        200 : #000000,
+        300 : #000000,
+        400 : #ffffff,
+        500 : #ffffff,
+        600 : #ffffff,
+        700 : #ffffff,
+        800 : #ffffff,
+        900 : #ffffff,
+        A100 : #000000,
+        A200 : #000000,
+        A400 : #000000,
+        A700 : #000000,
+    )
+);
+
 // Define the palettes for your theme using the Material Design palettes available in palette.scss
 // (imported above). For each palette, you can optionally specify a default, lighter, and darker
 // hue. Available color palettes: https://material.io/design/color/
-$lego-app-primary: mat-palette($mat-indigo);
-$lego-app-accent:  mat-palette($mat-pink, A200, A100, A400);
+$lego-app-primary: mat-palette($mat-legoyellow);
+$lego-app-accent:  mat-palette($mat-legored, 500, 200, 800);
 
 // The warn palette is optional (defaults to red).
 $lego-app-warn:    mat-palette($mat-red);

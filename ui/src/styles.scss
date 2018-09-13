@@ -44,8 +44,43 @@ body {
     flex: 1 1 auto;
 }
 
-.mat-button.menu-trigger {
-    min-width: 36px;
-    width: 36px;
-    padding: 0;
+.led-color-pink .mat-select-content {
+    color: mat-contrast($mat-pink, 400);
+    background-color: mat-color($mat-pink, 400);
+}
+.led-color-purple .mat-select-content {
+    color: mat-contrast($mat-purple, 400);
+    background-color: mat-color($mat-purple, 400);
+}
+.led-color-blue .mat-select-content {
+    color: mat-contrast($mat-blue, 400);
+    background-color: mat-color($mat-blue, 400);
+}
+.led-color-lightblue .mat-select-content {
+    color: mat-contrast($mat-light-blue, 400);
+    background-color: mat-color($mat-light-blue, 400);
+}
+.led-color-cyan .mat-select-content {
+    color: mat-contrast($mat-cyan, 400);
+    background-color: mat-color($mat-cyan, 400);
+}
+.led-color-green .mat-select-content {
+    color: mat-contrast($mat-green, 400);
+    background-color: mat-color($mat-green, 400);
+}
+.led-color-yellow .mat-select-content {
+    color: mat-contrast($mat-yellow, 400);
+    background-color: mat-color($mat-yellow, 400);
+}
+.led-color-orange .mat-select-content {
+    color: mat-contrast($mat-orange, 400);
+    background-color: mat-color($mat-orange, 400);
+}
+.led-color-red .mat-select-content {
+    color: mat-contrast($mat-red, 400);
+    background-color: mat-color($mat-red, 400);
+}
+.led-color-white .mat-select-content {
+    color: mat-contrast($mat-grey, 'A100');
+    background-color: mat-color($mat-grey, 'A100');
 }

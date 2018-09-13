@@ -5,6 +5,7 @@ import { take, pairwise } from 'rxjs/operators';
 import { ControlState } from '../movehub/models/control-state';
 import { MovehubService } from '../movehub/movehub.service';
 import { LedColor } from '../movehub/models/led-color';
+import { FormControl } from '@angular/forms';
 
 @Component({
     selector: 'movehub-home',
@@ -15,6 +16,7 @@ export class HomeComponent implements OnInit {
     public message = '';
     public colorSensor: ReplaySubject<string>;
     public ledColor: ReplaySubject<LedColor>;
+    public ledColorControl: FormControl;
     public socketConnected = false;
     public isConnected: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
@@ -23,6 +25,7 @@ export class HomeComponent implements OnInit {
     constructor(private movehubService: MovehubService) {
         this.colorSensor = new ReplaySubject<string>(1);
         this.ledColor = new ReplaySubject<LedColor>(1);
+        this.ledColorControl = new FormControl();
     }
 
     ngOnInit() {
@@ -38,9 +41,13 @@ export class HomeComponent implements OnInit {
         });
         this.isConnected.pipe(pairwise()).subscribe(connected => {
             if (connected[0] !== connected[1]) {
+                this.ledColorControl.setValue(LedColor.Blue);
                 this.controlState.motorA = 0;
                 this.controlState.motorB = 0;
             }
+        });
+        this.ledColorControl.valueChanges.subscribe((value: LedColor) => {
+            this.setLed(value);
         });
     }
 
