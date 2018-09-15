@@ -10,16 +10,16 @@
         background-color: mat-color($mat-grey, 900);
     }
     &.blue {
-        background-color: mat-color($mat-blue, 400);
+        background-color: mat-color($mat-blue, 500);
     }
     &.green {
-        background-color: mat-color($mat-green, 400);
+        background-color: mat-color($mat-green, 500);
     }
     &.yellow {
-        background-color: mat-color($mat-yellow, 400);
+        background-color: mat-color($mat-yellow, 500);
     }
     &.red {
-        background-color: mat-color($mat-red, 400);
+        background-color: mat-color($mat-red, 500);
     }
     &.white {
         background-color: mat-color($mat-grey, 'A100');
@@ -46,47 +46,47 @@
 
     &.pink {
         ::ng-deep .mat-select-value::after {
-            background-color: mat-color($mat-pink, 400);
+            background-color: mat-color($mat-pink, 500);
         }
     }
     &.purple {
         ::ng-deep .mat-select-value::after {
-            background-color: mat-color($mat-purple, 400);
+            background-color: mat-color($mat-purple, 500);
         }
     }
     &.blue {
         ::ng-deep .mat-select-value::after {
-            background-color: mat-color($mat-blue, 400);
+            background-color: mat-color($mat-blue, 500);
         }
     }
     &.lightblue {
         ::ng-deep .mat-select-value::after {
-            background-color: mat-color($mat-light-blue, 400);
+            background-color: mat-color($mat-light-blue, 500);
         }
     }
     &.cyan {
         ::ng-deep .mat-select-value::after {
-            background-color: mat-color($mat-cyan, 400);
+            background-color: mat-color($mat-cyan, 500);
         }
     }
     &.green {
         ::ng-deep .mat-select-value::after {
-            background-color: mat-color($mat-green, 400);
+            background-color: mat-color($mat-green, 500);
         }
     }
     &.yellow {
         ::ng-deep .mat-select-value::after {
-            background-color: mat-color($mat-yellow, 400);
+            background-color: mat-color($mat-yellow, 500);
         }
     }
     &.orange {
         ::ng-deep .mat-select-value::after {
-            background-color: mat-color($mat-orange, 400);
+            background-color: mat-color($mat-orange, 500);
         }
     }
     &.red {
         ::ng-deep .mat-select-value::after {
-            background-color: mat-color($mat-red, 400);
+            background-color: mat-color($mat-red, 500);
         }
     }
     &.white {
@@ -100,7 +100,7 @@
 }
 
 .connection-status {
-    color: mat-color($mat-legored, 400);
+    color: mat-color($mat-legored, 500);
 
     &.connected {
         color: mat-color($mat-green, 700);

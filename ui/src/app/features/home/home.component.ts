@@ -1,11 +1,13 @@
 import { Component, OnInit } from '@angular/core';
+import { FormControl } from '@angular/forms';
+import { MatDialog, MatDialogRef } from '@angular/material';
 import { BehaviorSubject, ReplaySubject } from 'rxjs';
-import { take, pairwise } from 'rxjs/operators';
+import { pairwise, take } from 'rxjs/operators';
 
 import { ControlState } from '../movehub/models/control-state';
-import { MovehubService } from '../movehub/movehub.service';
 import { LedColor } from '../movehub/models/led-color';
-import { FormControl } from '@angular/forms';
+import { MovehubService } from '../movehub/movehub.service';
+import { ConnectDialogComponent } from '../connect-dialog/connect-dialog.component';
 
 @Component({
     selector: 'movehub-home',
@@ -13,7 +15,22 @@ import { FormControl } from '@angular/forms';
     styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
-    public message = '';
+    public knobOptions = {
+        readOnly: false,
+        size: 140,
+        displayInput: false,
+        valueformat: 'percent',
+        min: 0,
+        max: 2147483647,
+        trackWidth: 19,
+        barWidth: 20,
+        trackColor: '#fff1b3',
+        barColor: '#d01012',
+        subText: {
+            enabled: false
+        }
+    };
+
     public colorSensor: ReplaySubject<string>;
     public distance: ReplaySubject<number>;
     public ledColor: ReplaySubject<LedColor>;
@@ -23,7 +40,7 @@ export class HomeComponent implements OnInit {
 
     public controlState: ControlState = new ControlState();
 
-    constructor(private movehubService: MovehubService) {
+    constructor(private movehubService: MovehubService, private dialog: MatDialog) {
         this.colorSensor = new ReplaySubject<string>(1);
         this.distance = new ReplaySubject<number>(1);
         this.ledColor = new ReplaySubject<LedColor>(1);
@@ -31,13 +48,19 @@ export class HomeComponent implements OnInit {
     }
 
     ngOnInit() {
+        let dialogRef: MatDialogRef<ConnectDialogComponent>;
         this.movehubService.socketConnected.subscribe(connected => {
             this.socketConnected = connected;
             if (!connected) {
                 this.isConnected.next(false);
+            } else {
+                dialogRef = this.dialog.open(ConnectDialogComponent);
             }
         });
         this.movehubService.deviceInfo.subscribe(deviceInfo => {
+            if (dialogRef) {
+                dialogRef.close();
+            }
             deviceInfo.color ? this.colorSensor.next(deviceInfo.color) : this.colorSensor.next('');
             this.distance.next(deviceInfo.distance);
             this.isConnected.next(deviceInfo.connected && this.socketConnected);
