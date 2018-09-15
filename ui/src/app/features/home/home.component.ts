@@ -45,6 +45,7 @@ export class HomeComponent implements OnInit {
         this.distance = new ReplaySubject<number>(1);
         this.ledColor = new ReplaySubject<LedColor>(1);
         this.ledColorControl = new FormControl();
+        this.ledColorControl.disable();
     }
 
     ngOnInit() {
@@ -54,7 +55,9 @@ export class HomeComponent implements OnInit {
             if (!connected) {
                 this.isConnected.next(false);
             } else {
-                dialogRef = this.dialog.open(ConnectDialogComponent);
+                dialogRef = this.dialog.open(ConnectDialogComponent, {
+                    disableClose: true
+                });
             }
         });
         this.movehubService.deviceInfo.subscribe(deviceInfo => {
@@ -71,6 +74,11 @@ export class HomeComponent implements OnInit {
                 this.controlState.motorA = 0;
                 this.controlState.motorB = 0;
             }
+            if (connected[1]) {
+                this.ledColorControl.enable();
+            } else {
+                this.ledColorControl.disable();
+            }
         });
         this.ledColorControl.valueChanges.subscribe((value: LedColor) => {
             this.setLed(value);
@@ -79,6 +87,11 @@ export class HomeComponent implements OnInit {
 
     public updateInput() {
         this.movehubService.updateInput(this.controlState);
+    }
+
+    public updateExternalMotorValue(value: number) {
+        this.controlState.externalMotor = value;
+        console.log(value);
     }
 
     public stop() {

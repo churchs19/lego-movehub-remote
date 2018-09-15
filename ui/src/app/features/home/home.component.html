@@ -32,7 +32,7 @@
                 <span *ngIf="(distance | async) === null" class="mat-body">∞</span>
                 <button color="accent" mat-raised-button type="button" (click)="stop()" [disabled]="!(isConnected | async)">STOP</button>
                 <mat-form-field>
-                    <mat-select class="led-color" [ngClass]="ledColorControl.value" placeholder="LED Color" [formControl]="ledColorControl" panelClass="led-color-panel" [disabled]="!(isConnected | async)">
+                    <mat-select class="led-color" [ngClass]="ledColorControl.value" placeholder="LED Color" [formControl]="ledColorControl" panelClass="led-color-panel">
                         <mat-option value="off">Off</mat-option>
                         <mat-option value="pink" class="pink">Pink</mat-option>
                         <mat-option value="purple" class="purple">Purple</mat-option>
@@ -46,7 +46,7 @@
                         <mat-option value="white" class="white">White</mat-option>
                     </mat-select>
                 </mat-form-field>
-                <div ui-knob [value]="30" [options]="knobOptions"></div>
+                <div ui-knob [value]="controlState.externalMotor" [options]="knobOptions"></div>
             </div>
             <div class="column">
                 <span class="mat-body-2">Motor B</span>
