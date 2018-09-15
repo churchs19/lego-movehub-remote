@@ -2,7 +2,7 @@
 // Definitions by: Shane Church <https://s-church.net>
 import { EventEmitter } from 'events';
 
-export = MovehubAsync;
+export = Boost;
 
 declare function MovehubAsync(): MovehubAsync.Boost;
 

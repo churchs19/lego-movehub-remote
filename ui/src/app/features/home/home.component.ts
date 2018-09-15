@@ -15,6 +15,7 @@ import { FormControl } from '@angular/forms';
 export class HomeComponent implements OnInit {
     public message = '';
     public colorSensor: ReplaySubject<string>;
+    public distance: ReplaySubject<number>;
     public ledColor: ReplaySubject<LedColor>;
     public ledColorControl: FormControl;
     public socketConnected = false;
@@ -24,6 +25,7 @@ export class HomeComponent implements OnInit {
 
     constructor(private movehubService: MovehubService) {
         this.colorSensor = new ReplaySubject<string>(1);
+        this.distance = new ReplaySubject<number>(1);
         this.ledColor = new ReplaySubject<LedColor>(1);
         this.ledColorControl = new FormControl();
     }
@@ -37,6 +39,7 @@ export class HomeComponent implements OnInit {
         });
         this.movehubService.deviceInfo.subscribe(deviceInfo => {
             deviceInfo.color ? this.colorSensor.next(deviceInfo.color) : this.colorSensor.next('');
+            this.distance.next(deviceInfo.distance);
             this.isConnected.next(deviceInfo.connected && this.socketConnected);
         });
         this.isConnected.pipe(pairwise()).subscribe(connected => {

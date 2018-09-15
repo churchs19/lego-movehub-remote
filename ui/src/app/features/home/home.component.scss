@@ -29,76 +29,74 @@
 .led-color {
     position: relative;
 
-    &::before {
-        content: ' ';
-        display: block;
-        position: absolute;
-        top: -6px;
-        bottom: -6px;
-        left: 0;
-        right: 0;
+    ::ng-deep .mat-select-value {
+        position: relative;
+
+        &::after {
+            display: block;
+            content: ' ';
+            border-radius: 50%;
+            position: absolute;
+            height: 18px;
+            width: 18px;
+            right: 0;
+            top: 0;
+        }
     }
 
-    // &.pink {
-    //     color: mat-contrast($mat-pink, 400);
-    //     &::before {
-    //         background-color: mat-color($mat-pink, 400);
-    //     }
-    // }
-    // &.purple {
-    //     color: mat-contrast($mat-purple, 400);
-    //     &::before {
-    //         background-color: mat-color($mat-purple, 400);
-    //     }
-    // }
-    // &.blue {
-    //     color: mat-contrast($mat-blue, 400);
-    //     &::before {
-    //         background-color: mat-color($mat-blue, 400);
-    //     }
-    // }
-    // &.lightblue {
-    //     color: mat-contrast($mat-light-blue, 400);
-    //     &::before {
-    //         background-color: mat-color($mat-light-blue, 400);
-    //     }
-    // }
-    // &.cyan {
-    //     color: mat-contrast($mat-cyan, 400);
-    //     &::before {
-    //         background-color: mat-color($mat-cyan, 400);
-    //     }
-    // }
-    // &.green {
-    //     color: mat-contrast($mat-green, 400);
-    //     &::before {
-    //         background-color: mat-color($mat-green, 400);
-    //     }
-    // }
-    // &.yellow {
-    //     color: mat-contrast($mat-yellow, 400);
-    //     &::before {
-    //         background-color: mat-color($mat-yellow, 400);
-    //     }
-    // }
-    // &.orange {
-    //     color: mat-contrast($mat-orange, 400);
-    //     &::before {
-    //         background-color: mat-color($mat-orange, 400);
-    //     }
-    // }
-    // &.red {
-    //     color: mat-contrast($mat-red, 400);
-    //     &::before {
-    //         background-color: mat-color($mat-red, 400);
-    //     }
-    // }
-    // &.white {
-    //     color: mat-contrast($mat-grey, 'A100');
-    //     &::before {
-    //         background-color: mat-color($mat-grey, 'A100');
-    //     }
-    // }
+    &.pink {
+        ::ng-deep .mat-select-value::after {
+            background-color: mat-color($mat-pink, 400);
+        }
+    }
+    &.purple {
+        ::ng-deep .mat-select-value::after {
+            background-color: mat-color($mat-purple, 400);
+        }
+    }
+    &.blue {
+        ::ng-deep .mat-select-value::after {
+            background-color: mat-color($mat-blue, 400);
+        }
+    }
+    &.lightblue {
+        ::ng-deep .mat-select-value::after {
+            background-color: mat-color($mat-light-blue, 400);
+        }
+    }
+    &.cyan {
+        ::ng-deep .mat-select-value::after {
+            background-color: mat-color($mat-cyan, 400);
+        }
+    }
+    &.green {
+        ::ng-deep .mat-select-value::after {
+            background-color: mat-color($mat-green, 400);
+        }
+    }
+    &.yellow {
+        ::ng-deep .mat-select-value::after {
+            background-color: mat-color($mat-yellow, 400);
+        }
+    }
+    &.orange {
+        ::ng-deep .mat-select-value::after {
+            background-color: mat-color($mat-orange, 400);
+        }
+    }
+    &.red {
+        ::ng-deep .mat-select-value::after {
+            background-color: mat-color($mat-red, 400);
+        }
+    }
+    &.white {
+        ::ng-deep .mat-select-value::after {
+            height: 16px;
+            width: 16px;
+            background-color: mat-color($mat-grey, 'A100');
+            border: 1px solid mat-color($mat-gray, 900);
+        }
+    }
 }
 
 .connection-status {

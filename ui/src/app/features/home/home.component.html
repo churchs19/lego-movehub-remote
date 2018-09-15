@@ -26,21 +26,24 @@
             </div>
             <div class="column status-section">
                 <span class="mat-body-2">Color Sensor</span>
-                <div class="color-sensor" [ngClass]="colorSensor | async">{{colorSensor | async}}</div>
+                <div class="color-sensor" [ngClass]="colorSensor | async"></div>
+                <span class="mat-body-2">Distance</span>
+                <span class="mat-body" *ngIf="(distance | async) !== null">{{distance | async }} mm</span>
+                <span *ngIf="(distance | async) === null" class="mat-body">∞</span>
                 <button color="accent" mat-raised-button type="button" (click)="stop()" [disabled]="!(isConnected | async)">STOP</button>
                 <mat-form-field>
-                    <mat-select class="led-color" placeholder="LED Color" [formControl]="ledColorControl" panelClass="led-color-{{ledColorControl.value}}" [disabled]="!(isConnected | async)">
+                    <mat-select class="led-color" [ngClass]="ledColorControl.value" placeholder="LED Color" [formControl]="ledColorControl" panelClass="led-color-panel" [disabled]="!(isConnected | async)">
                         <mat-option value="off">Off</mat-option>
-                        <mat-option value="pink">Pink</mat-option>
-                        <mat-option value="purple">Purple</mat-option>
-                        <mat-option value="blue">Blue</mat-option>
-                        <mat-option value="lightblue">Light Blue</mat-option>
-                        <mat-option value="cyan">Cyan</mat-option>
-                        <mat-option value="green">Green</mat-option>
-                        <mat-option value="yellow">Yellow</mat-option>
-                        <mat-option value="orange">Orange</mat-option>
-                        <mat-option value="red">Red</mat-option>
-                        <mat-option value="white">White</mat-option>
+                        <mat-option value="pink" class="pink">Pink</mat-option>
+                        <mat-option value="purple" class="purple">Purple</mat-option>
+                        <mat-option value="blue" class="blue">Blue</mat-option>
+                        <mat-option value="lightblue" class="lightblue">Light Blue</mat-option>
+                        <mat-option value="cyan" class="cyan">Cyan</mat-option>
+                        <mat-option value="green" class="green">Green</mat-option>
+                        <mat-option value="yellow" class="yellow">Yellow</mat-option>
+                        <mat-option value="orange" class="orange">Orange</mat-option>
+                        <mat-option value="red" class="red">Red</mat-option>
+                        <mat-option value="white" class="white">White</mat-option>
                     </mat-select>
                 </mat-form-field>
             </div>

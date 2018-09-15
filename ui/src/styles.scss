@@ -44,43 +44,53 @@ body {
     flex: 1 1 auto;
 }
 
-.led-color-pink .mat-select-content {
-    color: mat-contrast($mat-pink, 400);
-    background-color: mat-color($mat-pink, 400);
-}
-.led-color-purple .mat-select-content {
-    color: mat-contrast($mat-purple, 400);
-    background-color: mat-color($mat-purple, 400);
-}
-.led-color-blue .mat-select-content {
-    color: mat-contrast($mat-blue, 400);
-    background-color: mat-color($mat-blue, 400);
-}
-.led-color-lightblue .mat-select-content {
-    color: mat-contrast($mat-light-blue, 400);
-    background-color: mat-color($mat-light-blue, 400);
-}
-.led-color-cyan .mat-select-content {
-    color: mat-contrast($mat-cyan, 400);
-    background-color: mat-color($mat-cyan, 400);
-}
-.led-color-green .mat-select-content {
-    color: mat-contrast($mat-green, 400);
-    background-color: mat-color($mat-green, 400);
-}
-.led-color-yellow .mat-select-content {
-    color: mat-contrast($mat-yellow, 400);
-    background-color: mat-color($mat-yellow, 400);
-}
-.led-color-orange .mat-select-content {
-    color: mat-contrast($mat-orange, 400);
-    background-color: mat-color($mat-orange, 400);
-}
-.led-color-red .mat-select-content {
-    color: mat-contrast($mat-red, 400);
-    background-color: mat-color($mat-red, 400);
-}
-.led-color-white .mat-select-content {
-    color: mat-contrast($mat-grey, 'A100');
-    background-color: mat-color($mat-grey, 'A100');
+.led-color-panel {
+    .mat-option {
+        position: relative;
+
+        &::after {
+            display: block;
+            content: ' ';
+            border-radius: 50%;
+            position: absolute;
+            height: 18px;
+            width: 18px;
+            right: 16px;
+            top: 15px;
+        }
+
+        &.pink::after {
+            background-color: mat-color($mat-pink, 400);
+        }
+        &.purple::after {
+            background-color: mat-color($mat-purple, 400);
+        }
+        &.blue::after {
+            background-color: mat-color($mat-blue, 400);
+        }
+        &.lightblue::after {
+            background-color: mat-color($mat-light-blue, 400);
+        }
+        &.cyan::after {
+            background-color: mat-color($mat-cyan, 400);
+        }
+        &.green::after {
+            background-color: mat-color($mat-green, 400);
+        }
+        &.yellow::after {
+            background-color: mat-color($mat-yellow, 400);
+        }
+        &.orange::after {
+            background-color: mat-color($mat-orange, 400);
+        }
+        &.red::after {
+            background-color: mat-color($mat-red, 400);
+        }
+        &.white::after {
+            height: 16px;
+            width: 16px;
+            background-color: mat-color($mat-grey, 'A100');
+            border: 1px solid mat-color($mat-gray, 900);
+        }
+    }
 }
