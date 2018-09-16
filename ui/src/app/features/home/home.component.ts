@@ -19,9 +19,8 @@ export class HomeComponent implements OnInit {
         readOnly: false,
         size: 140,
         displayInput: false,
-        valueformat: 'percent',
         min: 0,
-        max: 2147483647,
+        max: 360,
         trackWidth: 19,
         barWidth: 20,
         trackColor: '#fff1b3',
@@ -70,13 +69,14 @@ export class HomeComponent implements OnInit {
         });
         this.isConnected.pipe(pairwise()).subscribe(connected => {
             if (connected[0] !== connected[1]) {
-                this.ledColorControl.setValue(LedColor.Blue);
                 this.controlState.motorA = 0;
                 this.controlState.motorB = 0;
             }
             if (connected[1]) {
+                this.ledColorControl.setValue(LedColor.Blue);
                 this.ledColorControl.enable();
             } else {
+                this.ledColorControl.setValue(LedColor.Off);
                 this.ledColorControl.disable();
             }
         });
@@ -91,7 +91,7 @@ export class HomeComponent implements OnInit {
 
     public updateExternalMotorValue(value: number) {
         this.controlState.externalMotor = value;
-        console.log(value);
+        this.movehubService.updateInput(this.controlState);
     }
 
     public stop() {

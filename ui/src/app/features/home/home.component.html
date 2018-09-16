@@ -46,7 +46,7 @@
                         <mat-option value="white" class="white">White</mat-option>
                     </mat-select>
                 </mat-form-field>
-                <div ui-knob [value]="controlState.externalMotor" [options]="knobOptions"></div>
+                <div ui-knob [value]="controlState.externalMotor" [options]="knobOptions" (valueChange)="updateExternalMotorValue($event)"></div>
             </div>
             <div class="column">
                 <span class="mat-body-2">Motor B</span>

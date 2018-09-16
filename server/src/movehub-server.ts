@@ -42,12 +42,10 @@ export class MovehubServer {
                 });
 
                 socket.on('controlInput', (input: IControlState) => {
-                    console.log('controlInput: ' + JSON.stringify(input));
                     controller.control = input;
                 });
 
                 socket.on('led', (color: MovehubAsync.LedColor) => {
-                    console.log('led: ' + color);
                     controller.led = color;
                 });
 

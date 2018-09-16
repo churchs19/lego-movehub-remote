@@ -1,6 +1,6 @@
 import MovehubAsync = require('movehub-async');
 import { BehaviorSubject, from, fromEvent, Observable, of, ReplaySubject, Subject, timer } from 'rxjs';
-import { combineLatest, map, take, takeUntil } from 'rxjs/operators';
+import { combineLatest, map, pairwise, take, takeUntil } from 'rxjs/operators';
 
 import { IControlState } from '../interfaces/IControlState';
 import { IDeviceInfo } from '../interfaces/IDeviceInfo';
@@ -13,6 +13,7 @@ export class HubController {
     private timer: Observable<number>;
     private _control: BehaviorSubject<IControlState>;
     private _led: ReplaySubject<MovehubAsync.LedColor>;
+    private externalMotorAngle: BehaviorSubject<number>;
     private unsubscribe: Subject<boolean>;
 
     constructor(deviceInfo: IDeviceInfo, controlState: IControlState) {
@@ -22,6 +23,7 @@ export class HubController {
         this._led = new ReplaySubject<MovehubAsync.LedColor>(1);
         this.device = deviceInfo;
         this._control = new BehaviorSubject<IControlState>(controlState);
+        this.externalMotorAngle = new BehaviorSubject<number>(0);
     }
 
     public start(): Observable<void> {
@@ -75,6 +77,7 @@ export class HubController {
 
                 this.subscribeLed();
                 this.subscribeControl();
+                this.subscribeExternalMotorAngle();
 
                 return;
             })
@@ -118,6 +121,7 @@ export class HubController {
                 takeUntil(this.unsubscribe)
             )
             .subscribe(params => {
+                this.externalMotorAngle.next(params[0].externalMotor);
                 let motorA = params[0].motorA > 100 ? 100 : params[0].motorA;
                 motorA = motorA < -100 ? -100 : motorA;
                 let motorB = params[0].motorB > 100 ? 100 : params[0].motorB;
@@ -131,5 +135,26 @@ export class HubController {
         this._led.pipe(takeUntil(this.unsubscribe)).subscribe(color => {
             this.hub.led(color);
         });
+    }
+
+    private subscribeExternalMotorAngle() {
+        this.externalMotorAngle
+            .pipe(
+                pairwise(),
+                takeUntil(this.unsubscribe)
+            )
+            .subscribe(values => {
+                if (values[0] !== values[1]) {
+                    if (values[0] === 359 && values[1] === 0) {
+                        this.hub.motorAngle('D', 1, 100);
+                    } else if (values[0] === 0 && values[1] === 359) {
+                        this.hub.motorAngle('D', 1, -100);
+                    } else if (values[0] > values[1]) {
+                        this.hub.motorAngle('D', values[0] - values[1], -100);
+                    } else {
+                        this.hub.motorAngle('D', values[1] - values[0], 100);
+                    }
+                }
+            });
     }
 }
