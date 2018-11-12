@@ -13,7 +13,7 @@
  *
  * Learn more in https://angular.io/docs/ts/latest/guide/browser-support.html
  */
-import 'core-js/es7/reflect';
+
 import 'hammerjs/hammer';
 import 'zone.js/dist/zone';
 
