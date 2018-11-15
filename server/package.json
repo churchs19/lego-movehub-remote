@@ -15,7 +15,7 @@
     "dependencies": {
         "express": "^4.16.4",
         "lodash": "^4.17.11",
-        "node-poweredup": "https://github.com/nathankellenicki/node-poweredup.git#f8ab345",
+        "node-poweredup": "file:../../node-poweredup/node-poweredup-1.1.7.tgz",
         "rxjs": "^6.3.3",
         "socket.io": "^2.1.1"
     },

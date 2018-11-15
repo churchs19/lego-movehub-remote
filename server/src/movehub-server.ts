@@ -2,6 +2,11 @@ import * as express from 'express';
 import { createServer, Server } from 'http';
 import * as socketIo from 'socket.io';
 
+import PoweredUP = require('node-poweredup');
+import { LPF2Hub } from 'node-poweredup/dist/lpf2hub';
+
+const poweredUP = new PoweredUP.PoweredUP();
+
 export class MovehubServer {
     public static readonly PORT: number = 8080;
     private app: express.Application;
@@ -24,7 +29,37 @@ export class MovehubServer {
     private listen(): void {
         this.server.listen(this.port, () => {
             console.log('Running server on port %s', this.port);
+            console.log('Waiting for client connection...');
         });
+
+        poweredUP.scan(); // Start scanning for hubs
+
+        console.log('Looking for Hubs...');
+
+        poweredUP.on('discover', async hub => {
+            // Wait to discover hubs
+
+            await hub.connect(); // Connect to hub
+            console.log(`Connected to ${hub.name}!`);
+
+            hub.on('disconnect', () => {
+                console.log('Hub disconnected');
+            });
+        });
+
+        let color = 1;
+        setInterval(() => {
+            const hubs = poweredUP.getConnectedHubs(); // Get an array of all connected hubs
+            hubs.forEach(hub => {
+                if ((hub as LPF2Hub).setLEDColor) {
+                    (hub as LPF2Hub).setLEDColor(color); // Set the color
+                }
+            });
+            color++;
+            if (color > 10) {
+                color = 1;
+            }
+        }, 2000);
 
         // this.io.on('connect', (socket: any) => {
         //     const controller = new HubController(new DeviceInfo(), new ControlState());
