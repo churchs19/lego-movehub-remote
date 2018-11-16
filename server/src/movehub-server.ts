@@ -1,9 +1,10 @@
 import * as express from 'express';
 import { createServer, Server } from 'http';
-import * as socketIo from 'socket.io';
-
 import PoweredUP = require('node-poweredup');
-import { LPF2Hub } from 'node-poweredup/dist/lpf2hub';
+import { fromEvent } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
+import * as socketIo from 'socket.io';
+import { ITiltEvent } from './interfaces/ITiltEvent';
 
 const poweredUP = new PoweredUP.PoweredUP();
 
@@ -27,10 +28,10 @@ export class MovehubServer {
     }
 
     private listen(): void {
-        this.server.listen(this.port, () => {
-            console.log('Running server on port %s', this.port);
-            console.log('Waiting for client connection...');
-        });
+        // this.server.listen(this.port, () => {
+        //     console.log('Running server on port %s', this.port);
+        //     console.log('Waiting for client connection...');
+        // });
 
         poweredUP.scan(); // Start scanning for hubs
 
@@ -40,10 +41,42 @@ export class MovehubServer {
             // Wait to discover hubs
 
             await hub.connect(); // Connect to hub
-            console.log(`Connected to ${hub.name}!`);
+            console.log(`Connected to ${hub.name} of type ${PoweredUP.Consts.Hubs[hub.type]}!`);
+
+            hub.on('button', (button: string, state: PoweredUP.Consts.ButtonStates) => {
+                console.log(`${hub.name} button ${button} state ${PoweredUP.Consts.ButtonStates[state]}`);
+            });
+
+            hub.on('distance', (port: string, distance: number) => {
+                console.log(`${hub.name} detected distance of ${distance}mm on port ${port}`);
+            });
+
+            hub.on('color', (port: string, detectedColor: PoweredUP.Consts.Colors) => {
+                console.log(
+                    `${hub.name} detected color of ${PoweredUP.Consts.Colors[detectedColor]}mm on port ${port}`
+                );
+            });
+
+            fromEvent<ITiltEvent>(hub, 'tilt').pipe(
+                debounceTime(1000)
+            ).subscribe((eventData) => {
+                console.log(`${hub.name} detected tilt of (${eventData.x},${eventData.y}) on port ${eventData.port}`);
+            });
+
+            hub.on('rotate', (port: string, rotation: number) => {
+                console.log(`${hub.name} detected rotation of ${rotation} on port ${port}`);
+            });
+
+            hub.on('attach', (port: string, type: PoweredUP.Consts.Devices) => {
+                console.log(`${hub.name} connected ${PoweredUP.Consts.Devices[type]} on port ${port}`);
+            });
+
+            hub.on('detach', (port: string) => {
+                console.log(`${hub.name} disconnected device on port ${port}`);
+            });
 
             hub.on('disconnect', () => {
-                console.log('Hub disconnected');
+                console.log(`Hub ${hub.name} disconnected`);
             });
         });
 
@@ -51,8 +84,9 @@ export class MovehubServer {
         setInterval(() => {
             const hubs = poweredUP.getConnectedHubs(); // Get an array of all connected hubs
             hubs.forEach(hub => {
-                if ((hub as LPF2Hub).setLEDColor) {
-                    (hub as LPF2Hub).setLEDColor(color); // Set the color
+                console.log(`Battery Level: ${hub.batteryLevel}%`);
+                if (hub.type === PoweredUP.Consts.Hubs.BOOST_MOVE_HUB) {
+                    (hub as PoweredUP.BoostMoveHub).setLEDColor(color); // Set the color
                 }
             });
             color++;

@@ -14,6 +14,7 @@
     "license": "MIT",
     "dependencies": {
         "express": "^4.16.4",
+        "linq": "^3.1.1",
         "lodash": "^4.17.11",
         "node-poweredup": "file:../../node-poweredup/node-poweredup-1.1.7.tgz",
         "rxjs": "^6.3.3",
