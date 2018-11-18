@@ -1,12 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatDialog, MatDialogRef } from '@angular/material';
-import { BehaviorSubject, ReplaySubject } from 'rxjs';
-import { pairwise, take } from 'rxjs/operators';
+import { Socket } from 'ngx-socket-io';
+import { BehaviorSubject } from 'rxjs';
 
-import { ControlState } from '../movehub/models/control-state';
-import { LedColor } from '../movehub/models/led-color';
-import { MovehubService } from '../movehub/movehub.service';
 import { ConnectDialogComponent } from '../connect-dialog/connect-dialog.component';
 
 @Component({
@@ -30,89 +27,20 @@ export class HomeComponent implements OnInit {
         }
     };
 
-    public colorSensor: ReplaySubject<string>;
-    public distance: ReplaySubject<number>;
-    public ledColor: ReplaySubject<LedColor>;
     public ledColorControl: FormControl;
     public socketConnected = false;
     public isConnected: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
-    public controlState: ControlState = new ControlState();
-
-    constructor(private movehubService: MovehubService, private dialog: MatDialog) {
-        this.colorSensor = new ReplaySubject<string>(1);
-        this.distance = new ReplaySubject<number>(1);
-        this.ledColor = new ReplaySubject<LedColor>(1);
+    constructor(private socket: Socket, private dialog: MatDialog) {
         this.ledColorControl = new FormControl();
         this.ledColorControl.disable();
     }
 
     ngOnInit() {
         let dialogRef: MatDialogRef<ConnectDialogComponent>;
-        this.movehubService.socketConnected.subscribe(connected => {
-            this.socketConnected = connected;
-            if (!connected) {
-                this.isConnected.next(false);
-            } else {
-                dialogRef = this.dialog.open(ConnectDialogComponent, {
-                    disableClose: true
-                });
-            }
-        });
-        this.movehubService.deviceInfo.subscribe(deviceInfo => {
-            if (dialogRef) {
-                dialogRef.close();
-            }
-            deviceInfo.color ? this.colorSensor.next(deviceInfo.color) : this.colorSensor.next('');
-            this.distance.next(deviceInfo.distance);
-            this.isConnected.next(deviceInfo.connected && this.socketConnected);
-        });
-        this.isConnected.pipe(pairwise()).subscribe(connected => {
-            if (connected[0] !== connected[1]) {
-                this.controlState.motorA = 0;
-                this.controlState.motorB = 0;
-            }
-            if (connected[1]) {
-                this.ledColorControl.setValue(LedColor.Blue);
-                this.ledColorControl.enable();
-            } else {
-                this.ledColorControl.setValue(LedColor.Off);
-                this.ledColorControl.disable();
-            }
-        });
-        this.ledColorControl.valueChanges.subscribe((value: LedColor) => {
-            this.setLed(value);
-        });
-    }
 
-    public updateInput() {
-        this.movehubService.updateInput(this.controlState);
-    }
-
-    public updateExternalMotorValue(value: number) {
-        this.controlState.externalMotor = value;
-        this.movehubService.updateInput(this.controlState);
-    }
-
-    public stop() {
-        this.controlState.motorA = 0;
-        this.controlState.motorB = 0;
-        this.updateInput();
-    }
-
-    public toggleConnection() {
-        this.isConnected.pipe(take(1)).subscribe(connected => {
-            if (connected) {
-                this.isConnected.next(false);
-                this.movehubService.disconnect();
-            } else {
-                this.movehubService.connect();
-            }
+        dialogRef = this.dialog.open(ConnectDialogComponent, {
+            // disableClose: true
         });
-    }
-
-    public setLed(color: LedColor) {
-        this.ledColor.next(color);
-        this.movehubService.ledColor = color;
     }
 }

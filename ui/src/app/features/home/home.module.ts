@@ -10,17 +10,15 @@ import {
     MatMenuModule,
     MatSelectModule,
     MatSliderModule,
-    MatToolbarModule
+    MatToolbarModule,
 } from '@angular/material';
 import { KnobModule } from 'angular4-knob';
 
 import { ConnectDialogModule } from '../connect-dialog/connect-dialog.module';
-import { MovehubModule } from '../movehub/movehub.module';
 import { HomeComponent } from './home.component';
 
 @NgModule({
     imports: [
-        MovehubModule,
         ConnectDialogModule,
         KnobModule,
         MatToolbarModule,

@@ -20,8 +20,8 @@ const config: SocketIoConfig = { url: 'http://localhost:8080', options: {} };
         BrowserModule,
         BrowserAnimationsModule,
         FlexLayoutModule,
-        SocketIoModule.forRoot(config),
-        RouterModule
+        RouterModule,
+        SocketIoModule.forRoot(config)
     ],
     providers: [{ provide: HAMMER_GESTURE_CONFIG, useClass: GestureConfig }],
     bootstrap: [AppComponent]
