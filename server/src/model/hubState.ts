@@ -5,7 +5,6 @@ import { MotorPortState } from './motorPortState';
 
 export class HubState {
     public batteryLevel: number;
-    public current: number;
     public color: Consts.Colors;
     public distance: number;
     public motorPorts: MotorPortState[];
@@ -13,5 +12,6 @@ export class HubState {
 
     constructor(public name: string) {
         this.motorPorts = [];
+        this.lightPorts = [];
     }
 }
