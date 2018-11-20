@@ -103,11 +103,15 @@ export class HubController {
 
         this.hub.on('disconnect', () => {
             console.log(`this.hub ${this.hub.name} disconnected`);
+            this.updateHubState(false);
             this.disconnectNotifier.next(false);
         });
+
+        this.updateHubState(true);
     }
 
-    private updateHubState() {
+    private updateHubState(connected: boolean = true) {
+        this._hubState.connected = connected;
         this._hubState.batteryLevel = this.hub.batteryLevel;
         this.hubState.next(this._hubState);
     }

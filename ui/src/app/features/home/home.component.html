@@ -2,20 +2,11 @@
     <mat-toolbar color="primary">
         <span>Lego Movehub Remote</span>
         <div class="toolbar-fill"></div>
-        <!-- <button mat-icon-button type="button" class="connection-status" [ngClass]="{ connected: (isConnected | async) }"
+        <button mat-icon-button type="button" class="connection-status" [ngClass]="{ connected: (isConnected | async) }"
             (click)="toggleConnection()">
             <mat-icon *ngIf="isConnected | async">bluetooth_connected</mat-icon>
             <mat-icon *ngIf="!(isConnected | async)">bluetooth_disabled</mat-icon>
-        </button> -->
-        <button mat-button type="menu" class="menu-trigger" [matMenuTriggerFor]="settingsMenu">
-            <mat-icon>more_vert</mat-icon>
         </button>
-        <mat-menu #settingsMenu="matMenu">
-            <button mat-menu-item>
-                <span *ngIf="isConnected | async">Disconnect</span>
-                <span *ngIf="!(isConnected | async)">Connect</span>
-            </button>
-        </mat-menu>
     </mat-toolbar>
     <div class="content-container">
         <div class="row">

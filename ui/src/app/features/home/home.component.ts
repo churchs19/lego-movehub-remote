@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { MatDialog, MatDialogRef } from '@angular/material';
+import { MatDialog } from '@angular/material';
 import { Socket } from 'ngx-socket-io';
 import { BehaviorSubject } from 'rxjs';
 
 import { ConnectDialogComponent } from '../connect-dialog/connect-dialog.component';
+import { IHubState } from '../interfaces/IHubState';
 
 @Component({
     selector: 'movehub-home',
@@ -37,10 +38,22 @@ export class HomeComponent implements OnInit {
     }
 
     ngOnInit() {
-        let dialogRef: MatDialogRef<ConnectDialogComponent>;
-
-        dialogRef = this.dialog.open(ConnectDialogComponent, {
-            // disableClose: true
+        const dialogRef = this.dialog.open(ConnectDialogComponent, {
+            disableClose: true
         });
+
+        this.socket.fromEvent<IHubState>('hubUpdated').subscribe(hubState => {
+            this.isConnected.next(hubState.connected);
+            console.log(`Hub ${hubState.name} updated.`);
+            dialogRef.close();
+        });
+    }
+
+    public toggleConnection() {
+        if (this.isConnected.value) {
+            this.socket.emit('disconnect');
+        } else {
+            this.socket.emit('connect');
+        }
     }
 }

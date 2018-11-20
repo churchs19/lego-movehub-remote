@@ -41,6 +41,9 @@ export class MovehubServer {
                 await hub.connect(); // Connect to hub
                 console.log(`Connected to ${hub.name} of type ${PoweredUP.Consts.Hubs[hub.type]}!`);
                 const controller = new HubController(hub);
+                controller.hubState.subscribe(hubState => {
+                    this.io.emit('hubUpdated', hubState);
+                });
                 controller.init();
             });
         });

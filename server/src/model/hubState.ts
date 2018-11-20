@@ -4,6 +4,7 @@ import { LightPortState } from './lightPortState';
 import { MotorPortState } from './motorPortState';
 
 export class HubState {
+    public connected: boolean = false;
     public batteryLevel: number;
     public color: Consts.Colors;
     public distance: number;
