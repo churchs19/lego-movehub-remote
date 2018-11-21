@@ -2,9 +2,15 @@
     <mat-toolbar color="primary">
         <span>Lego Movehub Remote</span>
         <div class="toolbar-fill"></div>
-        <button mat-icon-button type="button" class="connection-status" [ngClass]="{ connected: (isConnected | async) }"
-            (click)="toggleConnection()">
-            <mat-icon *ngIf="isConnected | async">bluetooth_connected</mat-icon>
+        <mat-icon>{{batteryIcon | async}}</mat-icon>
+        <button
+            mat-icon-button
+            type="button"
+            class="connection-status"
+            [ngClass]="{ connected: isConnected | async }"
+            (click)="toggleConnection()"
+        >
+            <mat-icon *ngIf="(isConnected | async)">bluetooth_connected</mat-icon>
             <mat-icon *ngIf="!(isConnected | async)">bluetooth_disabled</mat-icon>
         </button>
     </mat-toolbar>
@@ -15,14 +21,22 @@
                 <mat-slider thumbLabel tickInterval="100" vertical min="-100" max="100" step="1" value="0"></mat-slider>
             </div>
             <div class="column status-section">
-                <!-- <span class="mat-body-2">Color Sensor</span>
-                <div class="color-sensor" [ngClass]="colorSensor | async"></div>
-                <span class="mat-body-2">Distance</span>
-                <span class="mat-body" *ngIf="(distance | async) !== null">{{distance | async }} mm</span> -->
+                <!--
+                    <span class="mat-body-2">Color Sensor</span>
+                    <div class="color-sensor" [ngClass]="colorSensor | async"></div>
+                    <span class="mat-body-2">Distance</span>
+                    <span class="mat-body" *ngIf="(distance | async) !== null">{{distance | async }} mm</span>
+                -->
                 <!-- <span *ngIf="(distance | async) === null" class="mat-body">∞</span> -->
                 <button color="accent" mat-raised-button type="button">STOP</button>
                 <mat-form-field>
-                    <mat-select class="led-color" [ngClass]="ledColorControl.value" placeholder="LED Color" [formControl]="ledColorControl" panelClass="led-color-panel">
+                    <mat-select
+                        class="led-color"
+                        [ngClass]="ledColorControl.value"
+                        placeholder="LED Color"
+                        [formControl]="ledColorControl"
+                        panelClass="led-color-panel"
+                    >
                         <mat-option value="off">Off</mat-option>
                         <mat-option value="pink" class="pink">Pink</mat-option>
                         <mat-option value="purple" class="purple">Purple</mat-option>
@@ -36,12 +50,14 @@
                         <mat-option value="white" class="white">White</mat-option>
                     </mat-select>
                 </mat-form-field>
-                <!-- <div ui-knob [value]="controlState.externalMotor" [options]="knobOptions" (valueChange)="updateExternalMotorValue($event)"></div> -->
+                <!--
+                    <div ui-knob [value]="controlState.externalMotor" [options]="knobOptions" (valueChange)="updateExternalMotorValue($event)"></div>
+                -->
                 <div ui-knob [options]="knobOptions"></div>
             </div>
             <div class="column">
                 <span class="mat-body-2">Motor B</span>
-                <mat-slider thumbLabel tickInterval="100" vertical min="-100" max="100" step="1" value="0" ></mat-slider>
+                <mat-slider thumbLabel tickInterval="100" vertical min="-100" max="100" step="1" value="0"></mat-slider>
             </div>
         </div>
     </div>

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatDialog } from '@angular/material';
 import { Socket } from 'ngx-socket-io';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 
 import { ConnectDialogComponent } from '../connect-dialog/connect-dialog.component';
 import { IHubState } from '../interfaces/IHubState';
@@ -31,6 +31,7 @@ export class HomeComponent implements OnInit {
     public ledColorControl: FormControl;
     public socketConnected = false;
     public isConnected: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+    public batteryLevel: BehaviorSubject<number> = new BehaviorSubject<number>(-1);
 
     constructor(private socket: Socket, private dialog: MatDialog) {
         this.ledColorControl = new FormControl();
@@ -45,6 +46,7 @@ export class HomeComponent implements OnInit {
         this.socket.fromEvent<IHubState>('hubUpdated').subscribe(hubState => {
             this.isConnected.next(hubState.connected);
             console.log(`Hub ${hubState.name} updated.`);
+            this.batteryLevel.next(hubState.batteryLevel);
             dialogRef.close();
         });
     }
@@ -55,5 +57,9 @@ export class HomeComponent implements OnInit {
         } else {
             this.socket.emit('connect');
         }
+    }
+
+    public get batteryIcon(): Observable<string> {
+        return of('battery_unknown');
     }
 }
