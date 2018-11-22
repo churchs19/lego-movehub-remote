@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { MatDialog, MatDialogRef } from '@angular/material';
-import { BehaviorSubject, ReplaySubject } from 'rxjs';
-import { pairwise, take } from 'rxjs/operators';
+import { MatDialog, MatDialogRef, MatSlideToggleChange } from '@angular/material';
+import { Socket } from 'ngx-socket-io';
+import { BehaviorSubject, Observable, ReplaySubject } from 'rxjs';
+import { distinctUntilChanged, map } from 'rxjs/operators';
 
-import { ControlState } from '../movehub/models/control-state';
-import { LedColor } from '../movehub/models/led-color';
-import { MovehubService } from '../movehub/movehub.service';
 import { ConnectDialogComponent } from '../connect-dialog/connect-dialog.component';
+import { Colors } from '../consts';
+import { IHubState } from '../interfaces/IHubState';
 
 @Component({
     selector: 'movehub-home',
@@ -32,87 +32,110 @@ export class HomeComponent implements OnInit {
 
     public colorSensor: ReplaySubject<string>;
     public distance: ReplaySubject<number>;
-    public ledColor: ReplaySubject<LedColor>;
+    public ledColor: ReplaySubject<Colors>;
     public ledColorControl: FormControl;
     public socketConnected = false;
     public isConnected: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+    public batteryLevel: BehaviorSubject<number> = new BehaviorSubject<number>(-1);
 
-    public controlState: ControlState = new ControlState();
+    private hubName: string;
 
-    constructor(private movehubService: MovehubService, private dialog: MatDialog) {
+    constructor(private socket: Socket, private dialog: MatDialog) {
         this.colorSensor = new ReplaySubject<string>(1);
         this.distance = new ReplaySubject<number>(1);
-        this.ledColor = new ReplaySubject<LedColor>(1);
+        this.ledColor = new ReplaySubject<Colors>(1);
         this.ledColorControl = new FormControl();
+        this.ledColorControl.setValue(Colors.Blue);
         this.ledColorControl.disable();
     }
 
     ngOnInit() {
         let dialogRef: MatDialogRef<ConnectDialogComponent>;
-        this.movehubService.socketConnected.subscribe(connected => {
-            this.socketConnected = connected;
+
+        this.socket.fromEvent<IHubState>('hubUpdated').subscribe(hubState => {
+            console.log(`Hub ${hubState.name} updated.`);
+            this.hubName = hubState.name;
+            this.isConnected.next(hubState.connected);
+            this.batteryLevel.next(hubState.batteryLevel);
+            this.colorSensor.next(Colors[hubState.color]);
+            this.distance.next(hubState.distance);
+        });
+
+        this.isConnected.pipe(distinctUntilChanged()).subscribe(connected => {
             if (!connected) {
-                this.isConnected.next(false);
-            } else {
                 dialogRef = this.dialog.open(ConnectDialogComponent, {
                     disableClose: true
                 });
-            }
-        });
-        this.movehubService.deviceInfo.subscribe(deviceInfo => {
-            if (dialogRef) {
-                dialogRef.close();
-            }
-            deviceInfo.color ? this.colorSensor.next(deviceInfo.color) : this.colorSensor.next('');
-            this.distance.next(deviceInfo.distance);
-            this.isConnected.next(deviceInfo.connected && this.socketConnected);
-        });
-        this.isConnected.pipe(pairwise()).subscribe(connected => {
-            if (connected[0] !== connected[1]) {
-                this.controlState.motorA = 0;
-                this.controlState.motorB = 0;
-            }
-            if (connected[1]) {
-                this.ledColorControl.setValue(LedColor.Blue);
-                this.ledColorControl.enable();
-            } else {
-                this.ledColorControl.setValue(LedColor.Off);
                 this.ledColorControl.disable();
+            } else {
+                if (dialogRef) {
+                    dialogRef.close();
+                }
+                this.ledColorControl.enable();
+                this.ledColorControl.setValue(Colors.Blue);
             }
         });
-        this.ledColorControl.valueChanges.subscribe((value: LedColor) => {
+
+        this.ledColorControl.valueChanges.subscribe((value: Colors) => {
             this.setLed(value);
         });
     }
 
-    public updateInput() {
-        this.movehubService.updateInput(this.controlState);
-    }
-
-    public updateExternalMotorValue(value: number) {
-        this.controlState.externalMotor = value;
-        this.movehubService.updateInput(this.controlState);
-    }
-
-    public stop() {
-        this.controlState.motorA = 0;
-        this.controlState.motorB = 0;
-        this.updateInput();
-    }
-
     public toggleConnection() {
-        this.isConnected.pipe(take(1)).subscribe(connected => {
-            if (connected) {
-                this.isConnected.next(false);
-                this.movehubService.disconnect();
-            } else {
-                this.movehubService.connect();
-            }
+        if (this.isConnected.value) {
+            this.socket.emit('disconnect');
+        } else {
+            this.socket.emit('connect');
+        }
+    }
+
+    public get batteryIcon(): Observable<string> {
+        return this.batteryLevel.pipe(
+            map(it => {
+                let battery = 'battery_unknown';
+                battery = it >= 0 ? 'battery_alert' : battery;
+                battery = it > 10 ? 'battery_20' : battery;
+                battery = it > 20 ? 'battery_30' : battery;
+                battery = it > 30 ? 'battery_50' : battery;
+                battery = it > 50 ? 'battery_60' : battery;
+                battery = it > 60 ? 'battery_80' : battery;
+                battery = it > 80 ? 'battery_90' : battery;
+                battery = it > 90 ? 'battery_full' : battery;
+
+                return battery;
+            })
+        );
+    }
+
+    public get ledColorClass(): string {
+        return Colors[this.ledColorControl.value];
+    }
+
+    public setLed(color: Colors) {
+        this.ledColor.next(color);
+        this.socket.emit('led', {
+            hubName: this.hubName,
+            color: color
         });
     }
 
-    public setLed(color: LedColor) {
-        this.ledColor.next(color);
-        this.movehubService.ledColor = color;
+    public setMotorSpeed(port: string, speed: number) {
+        this.socket.emit('motorSpeed', {
+            hubName: this.hubName,
+            port: port,
+            speed: speed
+        });
+    }
+
+    public stop() {
+        this.setMotorSpeed('AB', 0);
+    }
+
+    public toggleExternalMotor(event: MatSlideToggleChange) {
+        if (event.checked) {
+            this.setMotorSpeed('C', 100);
+        } else {
+            this.setMotorSpeed('C', 0);
+        }
     }
 }

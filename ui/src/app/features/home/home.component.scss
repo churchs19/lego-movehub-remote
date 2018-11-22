@@ -6,22 +6,22 @@
     height: 60px;
     border: 1px solid mat-color($mat-grey, 900);
 
-    &.black {
+    &.Black {
         background-color: mat-color($mat-grey, 900);
     }
-    &.blue {
-        background-color: mat-color($mat-blue, 500);
+    &.Blue {
+        background-color: mat-clor($mat-blue, 500);
     }
-    &.green {
+    &.Green {
         background-color: mat-color($mat-green, 500);
     }
-    &.yellow {
+    &.Yellow {
         background-color: mat-color($mat-yellow, 500);
     }
-    &.red {
+    &.Red {
         background-color: mat-color($mat-red, 500);
     }
-    &.white {
+    &.White {
         background-color: mat-color($mat-grey, 'A100');
     }
 }
@@ -44,52 +44,52 @@
         }
     }
 
-    &.pink {
+    &.Pink {
         ::ng-deep .mat-select-value::after {
             background-color: mat-color($mat-pink, 500);
         }
     }
-    &.purple {
+    &.Purple {
         ::ng-deep .mat-select-value::after {
             background-color: mat-color($mat-purple, 500);
         }
     }
-    &.blue {
+    &.Blue {
         ::ng-deep .mat-select-value::after {
             background-color: mat-color($mat-blue, 500);
         }
     }
-    &.lightblue {
+    &.LightBlue {
         ::ng-deep .mat-select-value::after {
             background-color: mat-color($mat-light-blue, 500);
         }
     }
-    &.cyan {
+    &.Cyan {
         ::ng-deep .mat-select-value::after {
             background-color: mat-color($mat-cyan, 500);
         }
     }
-    &.green {
+    &.Green {
         ::ng-deep .mat-select-value::after {
             background-color: mat-color($mat-green, 500);
         }
     }
-    &.yellow {
+    &.Yellow {
         ::ng-deep .mat-select-value::after {
             background-color: mat-color($mat-yellow, 500);
         }
     }
-    &.orange {
+    &.Orange {
         ::ng-deep .mat-select-value::after {
             background-color: mat-color($mat-orange, 500);
         }
     }
-    &.red {
+    &.Red {
         ::ng-deep .mat-select-value::after {
             background-color: mat-color($mat-red, 500);
         }
     }
-    &.white {
+    &.White {
         ::ng-deep .mat-select-value::after {
             height: 16px;
             width: 16px;
