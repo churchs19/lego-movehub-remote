@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { MatDialog, MatDialogRef } from '@angular/material';
+import { MatDialog, MatDialogRef, MatSlideToggleChange } from '@angular/material';
 import { Socket } from 'ngx-socket-io';
 import { BehaviorSubject, Observable, ReplaySubject } from 'rxjs';
 import { distinctUntilChanged, map } from 'rxjs/operators';
@@ -129,5 +129,13 @@ export class HomeComponent implements OnInit {
 
     public stop() {
         this.setMotorSpeed('AB', 0);
+    }
+
+    public toggleExternalMotor(event: MatSlideToggleChange) {
+        if (event.checked) {
+            this.setMotorSpeed('C', 100);
+        } else {
+            this.setMotorSpeed('C', 0);
+        }
     }
 }

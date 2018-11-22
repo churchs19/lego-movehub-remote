@@ -10,6 +10,7 @@ import {
     MatMenuModule,
     MatSelectModule,
     MatSliderModule,
+    MatSlideToggleModule,
     MatToolbarModule,
 } from '@angular/material';
 import { KnobModule } from 'angular4-knob';
@@ -23,6 +24,7 @@ import { HomeComponent } from './home.component';
         KnobModule,
         MatToolbarModule,
         MatButtonModule,
+        MatSlideToggleModule,
         MatIconModule,
         MatMenuModule,
         MatSliderModule,

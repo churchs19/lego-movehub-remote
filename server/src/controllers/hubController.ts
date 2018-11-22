@@ -73,7 +73,7 @@ export class HubController {
         )
         .pipe(debounceTime(250))
         .subscribe(eventData => {
-            const message = `${this.hub.name} detected color of ${Consts.Colors[eventData.detectedColor]}` +
+            const message = `${this.hub.name} detected color of ${Consts.Colors[eventData.detectedColor]} ` +
             `and distance of ${eventData.distance} mm on port ${eventData.port}`;
             console.log(message);
             this._hubState.color = eventData.detectedColor;
@@ -82,7 +82,7 @@ export class HubController {
         });
 
         fromEvent<ITiltEvent>(this.hub, 'tilt', (...args: any[]) => new TiltEvent(args))
-            .pipe(debounceTime(1000))
+            .pipe(debounceTime(250))
             .subscribe(eventData => {
                 console.log(
                     `${this.hub.name} detected tilt of (${eventData.x},${eventData.y}) on port ${eventData.port}`
