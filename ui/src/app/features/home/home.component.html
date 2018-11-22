@@ -18,46 +18,44 @@
         <div class="row">
             <div class="column">
                 <span class="mat-body-2">Motor A</span>
-                <mat-slider thumbLabel tickInterval="100" vertical min="-100" max="100" step="1" value="0"></mat-slider>
+                <mat-slider #motorA thumbLabel tickInterval="10" vertical min="-100" max="100" step="1" value="0" (change)="setMotorSpeed('A', motorA.value)" [disabled]="!(isConnected | async)"></mat-slider>
             </div>
             <div class="column status-section">
-                <!--
-                    <span class="mat-body-2">Color Sensor</span>
-                    <div class="color-sensor" [ngClass]="colorSensor | async"></div>
-                    <span class="mat-body-2">Distance</span>
-                    <span class="mat-body" *ngIf="(distance | async) !== null">{{distance | async }} mm</span>
-                -->
-                <!-- <span *ngIf="(distance | async) === null" class="mat-body">∞</span> -->
-                <button color="accent" mat-raised-button type="button">STOP</button>
+                <span class="mat-body-2">Color Sensor</span>
+                <div class="color-sensor" [ngClass]="colorSensor | async"></div>
+                <span class="mat-body-2">Distance</span>
+                <span class="mat-body" *ngIf="(distance | async) !== null">{{ distance | async }} mm</span>
+                <span *ngIf="(distance | async) === null" class="mat-body">∞</span>
+                <button color="accent" mat-raised-button type="button" (click)="stop()">STOP</button>
                 <mat-form-field>
                     <mat-select
                         class="led-color"
-                        [ngClass]="ledColorControl.value"
+                        [ngClass]="ledColorClass"
                         placeholder="LED Color"
                         [formControl]="ledColorControl"
                         panelClass="led-color-panel"
                     >
-                        <mat-option value="off">Off</mat-option>
-                        <mat-option value="pink" class="pink">Pink</mat-option>
-                        <mat-option value="purple" class="purple">Purple</mat-option>
-                        <mat-option value="blue" class="blue">Blue</mat-option>
-                        <mat-option value="lightblue" class="lightblue">Light Blue</mat-option>
-                        <mat-option value="cyan" class="cyan">Cyan</mat-option>
-                        <mat-option value="green" class="green">Green</mat-option>
-                        <mat-option value="yellow" class="yellow">Yellow</mat-option>
-                        <mat-option value="orange" class="orange">Orange</mat-option>
-                        <mat-option value="red" class="red">Red</mat-option>
-                        <mat-option value="white" class="white">White</mat-option>
+                        <mat-option value="255">Off</mat-option>
+                        <mat-option value="1" class="pink">Pink</mat-option>
+                        <mat-option value="2" class="purple">Purple</mat-option>
+                        <mat-option value="3" class="blue">Blue</mat-option>
+                        <mat-option value="4" class="lightblue">Light Blue</mat-option>
+                        <mat-option value="5" class="cyan">Cyan</mat-option>
+                        <mat-option value="6" class="green">Green</mat-option>
+                        <mat-option value="7" class="yellow">Yellow</mat-option>
+                        <mat-option value="8" class="orange">Orange</mat-option>
+                        <mat-option value="9" class="red">Red</mat-option>
+                        <mat-option value="10" class="white">White</mat-option>
                     </mat-select>
                 </mat-form-field>
                 <!--
                     <div ui-knob [value]="controlState.externalMotor" [options]="knobOptions" (valueChange)="updateExternalMotorValue($event)"></div>
                 -->
-                <div ui-knob [options]="knobOptions"></div>
+                <!-- <div ui-knob [options]="knobOptions"></div> -->
             </div>
             <div class="column">
                 <span class="mat-body-2">Motor B</span>
-                <mat-slider thumbLabel tickInterval="100" vertical min="-100" max="100" step="1" value="0"></mat-slider>
+                <mat-slider #motorB thumbLabel tickInterval="10" vertical min="-100" max="100" step="1" value="0" (change)="setMotorSpeed('B', motorB.value)" [disabled]="!(isConnected | async)"></mat-slider>
             </div>
         </div>
     </div>

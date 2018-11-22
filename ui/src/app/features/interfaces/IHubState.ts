@@ -1,13 +1,14 @@
 import { Colors } from '../consts';
-import { ILightPortState } from './ILIghtPortState';
-import { IMotorPortState } from './IMotorPortState';
+import { ILightPortStateCollection } from './ILightPortStateCollection';
+import { IMotorPortStateCollection } from './IMotorPortStateCollection';
 
 export interface IHubState {
     connected: boolean;
     name: string;
     batteryLevel: number;
+    ledColor: Colors;
     color: Colors;
     distance: number;
-    motorPorts: IMotorPortState[];
-    lightPorts: ILightPortState[];
+    motorPorts: IMotorPortStateCollection;
+    lightPorts: ILightPortStateCollection;
 }

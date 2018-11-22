@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { MatDialog } from '@angular/material';
+import { MatDialog, MatDialogRef } from '@angular/material';
 import { Socket } from 'ngx-socket-io';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { BehaviorSubject, Observable, ReplaySubject } from 'rxjs';
+import { distinctUntilChanged, map } from 'rxjs/operators';
 
+import { ConnectDialogComponent } from '../connect-dialog/connect-dialog.component';
+import { Colors } from '../consts';
 import { IHubState } from '../interfaces/IHubState';
 
 @Component({
@@ -28,26 +30,54 @@ export class HomeComponent implements OnInit {
         }
     };
 
+    public colorSensor: ReplaySubject<string>;
+    public distance: ReplaySubject<number>;
+    public ledColor: ReplaySubject<Colors>;
     public ledColorControl: FormControl;
     public socketConnected = false;
     public isConnected: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
     public batteryLevel: BehaviorSubject<number> = new BehaviorSubject<number>(-1);
 
+    private hubName: string;
+
     constructor(private socket: Socket, private dialog: MatDialog) {
+        this.colorSensor = new ReplaySubject<string>(1);
+        this.distance = new ReplaySubject<number>(1);
+        this.ledColor = new ReplaySubject<Colors>(1);
         this.ledColorControl = new FormControl();
+        this.ledColorControl.setValue(Colors.Blue);
         this.ledColorControl.disable();
     }
 
     ngOnInit() {
-        // const dialogRef = this.dialog.open(ConnectDialogComponent, {
-        //     disableClose: true
-        // });
+        let dialogRef: MatDialogRef<ConnectDialogComponent>;
 
         this.socket.fromEvent<IHubState>('hubUpdated').subscribe(hubState => {
-            this.isConnected.next(hubState.connected);
             console.log(`Hub ${hubState.name} updated.`);
+            this.hubName = hubState.name;
+            this.isConnected.next(hubState.connected);
             this.batteryLevel.next(hubState.batteryLevel);
-//            dialogRef.close();
+            this.colorSensor.next(Colors[hubState.color]);
+            this.distance.next(hubState.distance);
+        });
+
+        this.isConnected.pipe(distinctUntilChanged()).subscribe(connected => {
+            if (!connected) {
+                dialogRef = this.dialog.open(ConnectDialogComponent, {
+                    disableClose: true
+                });
+                this.ledColorControl.disable();
+            } else {
+                if (dialogRef) {
+                    dialogRef.close();
+                }
+                this.ledColorControl.enable();
+                this.ledColorControl.setValue(Colors.Blue);
+            }
+        });
+
+        this.ledColorControl.valueChanges.subscribe((value: Colors) => {
+            this.setLed(value);
         });
     }
 
@@ -75,5 +105,29 @@ export class HomeComponent implements OnInit {
                 return battery;
             })
         );
+    }
+
+    public get ledColorClass(): string {
+        return Colors[this.ledColorControl.value];
+    }
+
+    public setLed(color: Colors) {
+        this.ledColor.next(color);
+        this.socket.emit('led', {
+            hubName: this.hubName,
+            color: color
+        });
+    }
+
+    public setMotorSpeed(port: string, speed: number) {
+        this.socket.emit('motorSpeed', {
+            hubName: this.hubName,
+            port: port,
+            speed: speed
+        });
+    }
+
+    public stop() {
+        this.setMotorSpeed('AB', 0);
     }
 }
