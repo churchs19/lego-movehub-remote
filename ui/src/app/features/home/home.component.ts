@@ -2,9 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatDialog } from '@angular/material';
 import { Socket } from 'ngx-socket-io';
-import { BehaviorSubject, Observable, of } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
-import { ConnectDialogComponent } from '../connect-dialog/connect-dialog.component';
 import { IHubState } from '../interfaces/IHubState';
 
 @Component({
@@ -39,15 +39,15 @@ export class HomeComponent implements OnInit {
     }
 
     ngOnInit() {
-        const dialogRef = this.dialog.open(ConnectDialogComponent, {
-            disableClose: true
-        });
+        // const dialogRef = this.dialog.open(ConnectDialogComponent, {
+        //     disableClose: true
+        // });
 
         this.socket.fromEvent<IHubState>('hubUpdated').subscribe(hubState => {
             this.isConnected.next(hubState.connected);
             console.log(`Hub ${hubState.name} updated.`);
             this.batteryLevel.next(hubState.batteryLevel);
-            dialogRef.close();
+//            dialogRef.close();
         });
     }
 
@@ -60,6 +60,20 @@ export class HomeComponent implements OnInit {
     }
 
     public get batteryIcon(): Observable<string> {
-        return of('battery_unknown');
+        return this.batteryLevel.pipe(
+            map(it => {
+                let battery = 'battery_unknown';
+                battery = it >= 0 ? 'battery_alert' : battery;
+                battery = it > 10 ? 'battery_20' : battery;
+                battery = it > 20 ? 'battery_30' : battery;
+                battery = it > 30 ? 'battery_50' : battery;
+                battery = it > 50 ? 'battery_60' : battery;
+                battery = it > 60 ? 'battery_80' : battery;
+                battery = it > 80 ? 'battery_90' : battery;
+                battery = it > 90 ? 'battery_full' : battery;
+
+                return battery;
+            })
+        );
     }
 }

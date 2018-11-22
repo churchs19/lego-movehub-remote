@@ -1,3 +1,4 @@
+import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { GestureConfig } from '@angular/material';
@@ -21,6 +22,7 @@ const config: SocketIoConfig = { url: 'http://localhost:8080', options: {} };
         BrowserAnimationsModule,
         FlexLayoutModule,
         RouterModule,
+        HttpClientModule,
         SocketIoModule.forRoot(config)
     ],
     providers: [{ provide: HAMMER_GESTURE_CONFIG, useClass: GestureConfig }],

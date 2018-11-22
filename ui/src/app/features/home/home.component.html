@@ -2,7 +2,7 @@
     <mat-toolbar color="primary">
         <span>Lego Movehub Remote</span>
         <div class="toolbar-fill"></div>
-        <mat-icon>{{batteryIcon | async}}</mat-icon>
+        <mat-icon [svgIcon]="batteryIcon | async"></mat-icon>
         <button
             mat-icon-button
             type="button"
