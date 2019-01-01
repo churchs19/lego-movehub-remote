@@ -48,11 +48,11 @@
                         <mat-option value="10" class="White">White</mat-option>
                     </mat-select>
                 </mat-form-field>
-                <mat-slide-toggle (change)="toggleExternalMotor($event)">External Motor</mat-slide-toggle>
+                <!-- <mat-slide-toggle (change)="toggleExternalMotor($event)">External Motor</mat-slide-toggle> -->
                 <!--
                     <div ui-knob [value]="controlState.externalMotor" [options]="knobOptions" (valueChange)="updateExternalMotorValue($event)"></div>
                 -->
-                <!-- <div ui-knob [options]="knobOptions"></div> -->
+                <div ui-knob [options]="knobOptions" [value]="0"></div>
             </div>
             <div class="column">
                 <span class="mat-body-2">Motor B</span>

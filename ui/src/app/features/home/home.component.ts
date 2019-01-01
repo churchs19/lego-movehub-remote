@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { MatDialog, MatDialogRef, MatSlideToggleChange } from '@angular/material';
+import { MatDialog, MatDialogRef } from '@angular/material';
 import { Socket } from 'ngx-socket-io';
 import { BehaviorSubject, Observable, ReplaySubject } from 'rxjs';
 import { distinctUntilChanged, map } from 'rxjs/operators';
@@ -19,8 +19,8 @@ export class HomeComponent implements OnInit {
         readOnly: false,
         size: 140,
         displayInput: false,
-        min: 0,
-        max: 360,
+        min: -30,
+        max: 30,
         trackWidth: 19,
         barWidth: 20,
         trackColor: '#fff1b3',
@@ -131,11 +131,11 @@ export class HomeComponent implements OnInit {
         this.setMotorSpeed('AB', 0);
     }
 
-    public toggleExternalMotor(event: MatSlideToggleChange) {
-        if (event.checked) {
-            this.setMotorSpeed('C', 100);
-        } else {
-            this.setMotorSpeed('C', 0);
-        }
-    }
+    // public toggleExternalMotor(event: MatSlideToggleChange) {
+    //     if (event.checked) {
+    //         this.setMotorSpeed('C', 100);
+    //     } else {
+    //         this.setMotorSpeed('C', 0);
+    //     }
+    // }
 }

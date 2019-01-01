@@ -45,7 +45,7 @@ export class MovehubServer {
                 // Wait to discover hubs
 
                 await hub.connect(); // Connect to hub
-                console.log(`Connected to ${hub.name} of type ${PoweredUP.Consts.Hubs[hub.type]}!`);
+                console.log(`Connected to ${hub.name} of type ${PoweredUP.Consts.HubType[hub.type]}!`);
                 const controller = new HubController(hub);
                 this.hubControllers[hub.name] = controller;
                 controller.hubState.subscribe(hubState => {
@@ -57,9 +57,6 @@ export class MovehubServer {
 
         this.io.on('connect', (socket: socketIo.Socket) => {
             console.log('Client connected...');
-            // this.poweredUP.getConnectedHubs().forEach(hub => {
-            //     socket.emit('hubUpdated', this.hubControllers[hub.name].hubState);
-            // });
 
             socket.on('motorSpeed', (request: IMotorSpeedRequest) => {
                 if (this.hubControllers[request.hubName]) {

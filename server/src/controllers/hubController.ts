@@ -40,7 +40,7 @@ export class HubController {
             .pipe(takeUntil(this.disconnectNotifier))
             .subscribe(eventData => {
                 console.log(
-                    `${this.hub.name} button ${eventData.button} state ${Consts.ButtonStates[eventData.state]}`
+                    `${this.hub.name} button ${eventData.button} state ${Consts.ButtonState[eventData.state]}`
                 );
                 this.updateHubState();
             });
@@ -59,7 +59,7 @@ export class HubController {
             .pipe(debounceTime(250))
             .subscribe(eventData => {
                 console.log(
-                    `${this.hub.name} detected color of ${Consts.Colors[eventData.detectedColor]} on port ${
+                    `${this.hub.name} detected color of ${Consts.Color[eventData.detectedColor]} on port ${
                         eventData.port
                     }`
                 );
@@ -68,18 +68,20 @@ export class HubController {
             });
 
         fromEvent<IColorAndDistanceEvent>(
-            this.hub, 'colorAndDistance',
+            this.hub,
+            'colorAndDistance',
             (...args: any[]) => new ColorAndDistanceEvent(args)
         )
-        .pipe(debounceTime(250))
-        .subscribe(eventData => {
-            const message = `${this.hub.name} detected color of ${Consts.Colors[eventData.detectedColor]} ` +
-            `and distance of ${eventData.distance} mm on port ${eventData.port}`;
-            console.log(message);
-            this._hubState.color = eventData.detectedColor;
-            this._hubState.distance = eventData.distance;
-            this.updateHubState();
-        });
+            .pipe(debounceTime(250))
+            .subscribe(eventData => {
+                const message =
+                    `${this.hub.name} detected color of ${Consts.Color[eventData.detectedColor]} ` +
+                    `and distance of ${eventData.distance} mm on port ${eventData.port}`;
+                console.log(message);
+                this._hubState.color = eventData.detectedColor;
+                this._hubState.distance = eventData.distance;
+                this.updateHubState();
+            });
 
         fromEvent<ITiltEvent>(this.hub, 'tilt', (...args: any[]) => new TiltEvent(args))
             .pipe(debounceTime(250))
@@ -103,15 +105,17 @@ export class HubController {
         fromEvent<IAttachEvent>(this.hub, 'attach', (...args: any[]) => new AttachEvent(args))
             .pipe(takeUntil(this.disconnectNotifier))
             .subscribe(eventData => {
-                console.log(`${this.hub.name} connected ${Consts.Devices[eventData.type]} on port ${eventData.port}`);
+                console.log(
+                    `${this.hub.name} connected ${Consts.DeviceType[eventData.type]} on port ${eventData.port}`
+                );
                 switch (eventData.type) {
-                    case Consts.Devices.BASIC_MOTOR:
-                    case Consts.Devices.BOOST_MOVE_HUB_MOTOR:
-                    case Consts.Devices.BOOST_TACHO_MOTOR:
-                    case Consts.Devices.DUPLO_TRAIN_BASE_MOTOR:
-                    case Consts.Devices.TRAIN_MOTOR:
+                    case Consts.DeviceType.BASIC_MOTOR:
+                    case Consts.DeviceType.BOOST_MOVE_HUB_MOTOR:
+                    case Consts.DeviceType.BOOST_TACHO_MOTOR:
+                    case Consts.DeviceType.DUPLO_TRAIN_BASE_MOTOR:
+                    case Consts.DeviceType.TRAIN_MOTOR:
                         this._hubState.motorPorts[eventData.port] = new MotorPortState(eventData.port, eventData.type);
-                    case Consts.Devices.LED_LIGHTS:
+                    case Consts.DeviceType.LED_LIGHTS:
                         this._hubState.lightPorts[eventData.port] = new LightPortState(eventData.port, eventData.type);
                 }
                 this.updateHubState();

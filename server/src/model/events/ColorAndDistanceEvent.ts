@@ -4,7 +4,7 @@ import { IColorAndDistanceEvent } from '../../interfaces/events/IColorAndDistanc
 
 export class ColorAndDistanceEvent implements IColorAndDistanceEvent {
     public port: string;
-    public detectedColor: Consts.Colors;
+    public detectedColor: Consts.Color;
     public distance: number;
 
     constructor(args: any[]) {

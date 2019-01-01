@@ -6,8 +6,8 @@ import { MotorPortStateCollection } from './motorPortStateCollection';
 export class HubState {
     public connected: boolean = false;
     public batteryLevel: number;
-    public ledColor: Consts.Colors;
-    public color: Consts.Colors;
+    public ledColor: Consts.Color;
+    public color: Consts.Color;
     public distance: number;
     public motorPorts: MotorPortStateCollection;
     public lightPorts: LightPortStateCollection;

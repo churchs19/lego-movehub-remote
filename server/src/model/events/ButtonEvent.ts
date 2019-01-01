@@ -4,7 +4,7 @@ import { IButtonEvent } from '../../interfaces/events/IButtonEvent';
 
 export class ButtonEvent implements IButtonEvent {
     public button: string;
-    public state: Consts.ButtonStates;
+    public state: Consts.ButtonState;
 
     constructor(args: any[]) {
         this.button = args[0];

@@ -4,7 +4,7 @@ import { IAttachEvent } from '../../interfaces/events/IAttachEvent';
 
 export class AttachEvent implements IAttachEvent {
     public port: string;
-    public type: Consts.Devices;
+    public type: Consts.DeviceType;
 
     constructor(args: any[]) {
         this.port = args[0];
