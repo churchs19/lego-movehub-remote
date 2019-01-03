@@ -2,7 +2,8 @@
     <mat-toolbar color="primary">
         <span>Lego Movehub Remote</span>
         <div class="toolbar-fill"></div>
-        <mat-icon [svgIcon]="batteryIcon | async"></mat-icon>
+        <mat-icon [svgIcon]="batteryIcon | async" [matTooltip]="((batteryLevel | async) / 100) | percent">
+        </mat-icon>
         <button
             mat-icon-button
             type="button"
@@ -52,7 +53,7 @@
                 <!--
                     <div ui-knob [value]="controlState.externalMotor" [options]="knobOptions" (valueChange)="updateExternalMotorValue($event)"></div>
                 -->
-                <div ui-knob [options]="knobOptions" [value]="0"></div>
+                <div ui-knob [options]="knobOptions" [value]="0" (click)="setHeadAngle()"></div>
             </div>
             <div class="column">
                 <span class="mat-body-2">Motor B</span>

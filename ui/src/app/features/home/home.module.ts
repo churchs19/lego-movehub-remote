@@ -12,6 +12,7 @@ import {
     MatSliderModule,
     MatSlideToggleModule,
     MatToolbarModule,
+    MatTooltipModule,
 } from '@angular/material';
 import { KnobModule } from 'angular4-knob';
 
@@ -31,6 +32,7 @@ import { HomeComponent } from './home.component';
         MatFormFieldModule,
         MatSelectModule,
         MatDialogModule,
+        MatTooltipModule,
         FlexLayoutModule,
         ReactiveFormsModule,
         FormsModule,

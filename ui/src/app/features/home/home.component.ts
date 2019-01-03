@@ -127,6 +127,15 @@ export class HomeComponent implements OnInit {
         });
     }
 
+    public setMotorAngle(port: string, angle: number, speed?: number) {
+        this.socket.emit('motorAngle', {
+            hubName: this.hubName,
+            port: port,
+            angle: angle,
+            speed: speed
+        });
+    }
+
     public stop() {
         this.setMotorSpeed('AB', 0);
     }
@@ -138,4 +147,8 @@ export class HomeComponent implements OnInit {
     //         this.setMotorSpeed('C', 0);
     //     }
     // }
+
+    public setHeadAngle() {
+        this.setMotorAngle('D', 30, -50);
+    }
 }
