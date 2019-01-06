@@ -58,6 +58,10 @@ export class MovehubServer {
         this.io.on('connect', (socket: socketIo.Socket) => {
             console.log('Client connected...');
 
+            Object.getOwnPropertyNames(this.hubControllers).map(name => {
+                this.io.emit('hubUpdated', this.hubControllers[name].hubState.getValue());
+            });
+
             socket.on('motorSpeed', (request: IMotorSpeedRequest) => {
                 if (this.hubControllers[request.hubName]) {
                     this.hubControllers[request.hubName].setMotorSpeed(request);

@@ -25,6 +25,8 @@ export class HomeComponent implements OnInit {
         barWidth: 20,
         trackColor: '#fff1b3',
         barColor: '#d01012',
+        startAngle: 240,
+        endAngle: 120,
         subText: {
             enabled: false
         }
