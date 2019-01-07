@@ -101,7 +101,6 @@ export class HomeComponent implements OnInit {
                 // Turn head left
                 this.setMotorAngle('D', motorAngle, -50);
             }
-            // this.setMotorAngle('D', 30, -50);
         });
     }
 
