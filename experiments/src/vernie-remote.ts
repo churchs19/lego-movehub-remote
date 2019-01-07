@@ -1,6 +1,6 @@
 import PoweredUP = require('node-poweredup');
 
-export class VernieRemote {
+class VernieRemote {
     private poweredUP = new PoweredUP.PoweredUP();
 
     public init() {
@@ -20,7 +20,11 @@ export class VernieRemote {
 
             console.log(`Connected to ${hub.name} of type ${PoweredUP.Consts.HubType[hub.type]}!`);
         });
+        this.poweredUP.scan();
+
+        console.log(`Waiting for Vernie and remote...`);
     }
 }
 
-new VernieRemote().init();
+const app = new VernieRemote().init();
+export { app };
