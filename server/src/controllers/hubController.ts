@@ -39,9 +39,7 @@ export class HubController {
         fromEvent<IButtonEvent>(this.hub, 'button', (...args: any[]) => new ButtonEvent(args))
             .pipe(takeUntil(this.disconnectNotifier))
             .subscribe(eventData => {
-                console.log(
-                    `${this.hub.name} button ${eventData.button} state ${Consts.ButtonState[eventData.state]}`
-                );
+                console.log(`${this.hub.name} button ${eventData.button} state ${Consts.ButtonState[eventData.state]}`);
                 this.updateHubState();
             });
 
@@ -167,7 +165,11 @@ export class HubController {
     public setMotorAngle(request: IMotorAngleRequest) {
         if (this._hubState.motorPorts[request.port]) {
             if (this.hub instanceof BoostMoveHub) {
-                (this.hub as BoostMoveHub).setMotorAngle(request.port, request.angle);
+                (this.hub as BoostMoveHub).setMotorAngle(
+                    request.port,
+                    request.angle,
+                    request.speed ? request.speed : 100
+                );
                 this.updateHubState();
             }
         }

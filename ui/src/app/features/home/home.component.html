@@ -2,8 +2,7 @@
     <mat-toolbar color="primary">
         <span>Lego Movehub Remote</span>
         <div class="toolbar-fill"></div>
-        <mat-icon [svgIcon]="batteryIcon | async" [matTooltip]="((batteryLevel | async) / 100) | percent">
-        </mat-icon>
+        <mat-icon [svgIcon]="batteryIcon | async" [matTooltip]="(batteryLevel | async) / 100 | percent"> </mat-icon>
         <button
             mat-icon-button
             type="button"
@@ -19,7 +18,18 @@
         <div class="row">
             <div class="column">
                 <span class="mat-body-2">Motor A</span>
-                <mat-slider #motorA thumbLabel tickInterval="10" vertical min="-100" max="100" step="1" value="0" (change)="setMotorSpeed('A', motorA.value)" [disabled]="!(isConnected | async)"></mat-slider>
+                <mat-slider
+                    #motorA
+                    thumbLabel
+                    tickInterval="10"
+                    vertical
+                    min="-100"
+                    max="100"
+                    step="1"
+                    value="0"
+                    (change)="setMotorSpeed('A', motorA.value)"
+                    [disabled]="!(isConnected | async)"
+                ></mat-slider>
             </div>
             <div class="column status-section">
                 <span class="mat-body-2">Color Sensor</span>
@@ -49,15 +59,24 @@
                         <mat-option value="10" class="White">White</mat-option>
                     </mat-select>
                 </mat-form-field>
-                <!-- <mat-slide-toggle (change)="toggleExternalMotor($event)">External Motor</mat-slide-toggle> -->
-                <!--
-                    <div ui-knob [value]="controlState.externalMotor" [options]="knobOptions" (valueChange)="updateExternalMotorValue($event)"></div>
-                -->
-                <div ui-knob [options]="knobOptions" [value]="0" (click)="setHeadAngle()"></div>
+                <span class="mat-body-2">Head Angle</span>
+                <div ui-knob [options]="knobOptions" [value]="headAngle | async" (valueChange)="setHeadAngle($event)"></div>
+                <span class="mat-body-1">{{ headAngle | async }}</span>
             </div>
             <div class="column">
                 <span class="mat-body-2">Motor B</span>
-                <mat-slider #motorB thumbLabel tickInterval="10" vertical min="-100" max="100" step="1" value="0" (change)="setMotorSpeed('B', motorB.value)" [disabled]="!(isConnected | async)"></mat-slider>
+                <mat-slider
+                    #motorB
+                    thumbLabel
+                    tickInterval="10"
+                    vertical
+                    min="-100"
+                    max="100"
+                    step="1"
+                    value="0"
+                    (change)="setMotorSpeed('B', motorB.value)"
+                    [disabled]="!(isConnected | async)"
+                ></mat-slider>
             </div>
         </div>
     </div>

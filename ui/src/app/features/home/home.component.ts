@@ -3,7 +3,7 @@ import { FormControl } from '@angular/forms';
 import { MatDialog, MatDialogRef } from '@angular/material';
 import { Socket } from 'ngx-socket-io';
 import { BehaviorSubject, Observable, ReplaySubject } from 'rxjs';
-import { distinctUntilChanged, map } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, map, pairwise } from 'rxjs/operators';
 
 import { ConnectDialogComponent } from '../connect-dialog/connect-dialog.component';
 import { Colors } from '../consts';
@@ -19,17 +19,14 @@ export class HomeComponent implements OnInit {
         readOnly: false,
         size: 140,
         displayInput: false,
-        min: -30,
-        max: 30,
+        min: -75,
+        max: 75,
         trackWidth: 19,
         barWidth: 20,
         trackColor: '#fff1b3',
         barColor: '#d01012',
-        startAngle: 240,
-        endAngle: 120,
-        subText: {
-            enabled: false
-        }
+        startAngle: -75,
+        endAngle: 75
     };
 
     public colorSensor: ReplaySubject<string>;
@@ -39,6 +36,7 @@ export class HomeComponent implements OnInit {
     public socketConnected = false;
     public isConnected: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
     public batteryLevel: BehaviorSubject<number> = new BehaviorSubject<number>(-1);
+    public headAngle: BehaviorSubject<number> = new BehaviorSubject<number>(0);
 
     private hubName: string;
 
@@ -80,6 +78,30 @@ export class HomeComponent implements OnInit {
 
         this.ledColorControl.valueChanges.subscribe((value: Colors) => {
             this.setLed(value);
+        });
+
+        this.headAngle.pipe(
+            debounceTime(500),
+            pairwise()
+        ).subscribe(values => {
+            let newAngle = values[1];
+            if (values[1] >= this.knobOptions.min && values[1] <= this.knobOptions.max) {
+                newAngle = values[1];
+            } else if (values[1] < this.knobOptions.min) {
+                newAngle = -75;
+            } else if (values[1] > this.knobOptions.max) {
+                newAngle = 75;
+            }
+
+            const motorAngle = Math.abs(newAngle) + Math.abs(values[0]);
+            if (newAngle > values[0]) {
+                // Turn head right
+                this.setMotorAngle('D', motorAngle, 50);
+            } else {
+                // Turn head left
+                this.setMotorAngle('D', motorAngle, -50);
+            }
+            // this.setMotorAngle('D', 30, -50);
         });
     }
 
@@ -140,17 +162,10 @@ export class HomeComponent implements OnInit {
 
     public stop() {
         this.setMotorSpeed('AB', 0);
+        this.setMotorAngle('D', 0);
     }
 
-    // public toggleExternalMotor(event: MatSlideToggleChange) {
-    //     if (event.checked) {
-    //         this.setMotorSpeed('C', 100);
-    //     } else {
-    //         this.setMotorSpeed('C', 0);
-    //     }
-    // }
-
-    public setHeadAngle() {
-        this.setMotorAngle('D', 30, -50);
+    public setHeadAngle(value: number) {
+        this.headAngle.next(value);
     }
 }
