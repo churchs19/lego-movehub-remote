@@ -1,0 +1,20 @@
+{
+    "files": ["src/vernie-remote.ts"],
+    "include": ["src/**/*.ts"],
+    "exclude": ["node_modules/**/**"],
+    "compilerOptions": {
+        "module": "commonjs",
+        "noImplicitAny": true,
+        "target": "es2015",
+        "outDir": "dist",
+        "rootDir": "src",
+        "sourceMap": true,
+        "baseUrl": "./",
+        "moduleResolution": "node",
+        "removeComments": true,
+        "typeRoots": ["node_modules/@types"],
+        "paths": {
+            "*": ["node_modules/@types/*"]
+        }
+    }
+}

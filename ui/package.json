@@ -1,6 +1,8 @@
 {
   "name": "lego-movehub-remote",
-  "version": "0.0.0",
+  "version": "1.0.0",
+  "license": "MIT",
+  "author": "Shane Church <shane@s-church.net>",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",

@@ -1,0 +1,17 @@
+{
+    "name": "lego-experiments",
+    "version": "1.0.0",
+    "description": "Lego Powered Up experiments",
+    "author": "Shane Church <shane@s-church.net>",
+    "license": "MIT",
+    "dependencies": {
+        "@types/noble": "0.0.38",
+        "node-poweredup": "^1.4.8"
+    },
+    "devDependencies": {
+        "@types/node": "^10.12.18",
+        "ts-node": "^7.0.1",
+        "tslint": "^5.12.0",
+        "typescript": "^3.2.2"
+    }
+}
