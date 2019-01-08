@@ -4,6 +4,9 @@
     "description": "Lego Powered Up experiments",
     "author": "Shane Church <shane@s-church.net>",
     "license": "MIT",
+    "scripts": {
+        "build": "tsc"
+    },
     "dependencies": {
         "@types/noble": "0.0.38",
         "node-poweredup": "^1.4.8"
