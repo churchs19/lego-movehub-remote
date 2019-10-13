@@ -59,7 +59,7 @@
                         <mat-option value="10" class="White">White</mat-option>
                     </mat-select>
                 </mat-form-field>
-                <span class="mat-body-2">Head Angle</span>
+                <span class="mat-body-2">External Motor Angle</span>
                 <div ui-knob [options]="knobOptions" [value]="headAngle | async" (valueChange)="setHeadAngle($event)"></div>
                 <span class="mat-body-1">{{ headAngle | async }}</span>
             </div>
