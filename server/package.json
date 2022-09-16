@@ -15,7 +15,7 @@
     "dependencies": {
         "express": "^4.17.1",
         "linq": "^3.2.1",
-        "lodash": "^4.17.19",
+        "lodash": "^4.17.21",
         "node-poweredup": "^3.5.1",
         "rxjs": "^6.5.3",
         "socket.io": "^2.4.0"
