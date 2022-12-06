@@ -13,7 +13,7 @@
     "author": "Shane Church <shane@s-church.net>",
     "license": "MIT",
     "dependencies": {
-        "express": "^4.17.1",
+        "express": "^4.18.2",
         "linq": "^3.2.1",
         "lodash": "^4.17.21",
         "node-poweredup": "^3.5.1",
